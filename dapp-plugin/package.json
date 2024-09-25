@@ -11,7 +11,8 @@
     "fix": "bun run check --write"
   },
   "dependencies": {
-    "@wingriders/cab": "^2.0.28"
+    "@wingriders/cab": "^2.0.28",
+    "borc": "^3.0.0"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.1",
