@@ -25,7 +25,6 @@ import {
   reverseUtxos,
   reverseVKeyWitnesses,
 } from '@wingriders/cab/wallet/connector'
-import axios from 'axios'
 
 import {calculateValidityInterval} from './validityInterval'
 import {getWalletOwner} from './wallet'
@@ -151,14 +150,3 @@ export const signTx = async ({
     txHash: cborizedTx.txHash as api.TxHash,
   }
 }
-
-export const submitTx = async (transactionCbor: string) =>
-  axios.post(
-    'http://127.0.0.1:3000/submitTx',
-    JSON.stringify({transactionCbor}),
-    {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    },
-  )

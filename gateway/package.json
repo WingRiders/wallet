@@ -24,7 +24,6 @@
     "@tanstack/react-router": "^1.57.18",
     "@wingriders/cab": "^2.0.28",
     "@wingriders/wallet-common": "workspace:*",
-    "axios": "^1.7.7",
     "borc": "^3.0.0",
     "date-fns": "^4.1.0",
     "graphql": "^16.9.0",
