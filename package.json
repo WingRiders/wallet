@@ -4,7 +4,8 @@
   "scripts": {
     "build": "turbo build",
     "check": "turbo check",
-    "fix": "turbo fix"
+    "fix": "turbo fix",
+    "test": "turbo test"
   },
   "devDependencies": {
     "@types/bun": "latest",

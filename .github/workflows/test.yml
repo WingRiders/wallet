@@ -7,7 +7,7 @@ on:
     branches: ['*']
 
 jobs:
-  lint-and-build:
+  lint-build-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,3 +27,6 @@ jobs:
 
       - name: Run build
         run: bun run build
+
+      - name: Run test
+        run: bun run test
