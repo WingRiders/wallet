@@ -1,0 +1,21 @@
+{
+  "name": "@wingriders/wallet-gateway-server",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "check": "bun biome check src",
+    "fix": "bun run check --write",
+    "start": "NODE_ENV=production bun src/index.ts"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "^1.1.1",
+    "@elysiajs/static": "^1.1.1",
+    "elysia": "^1.1.16",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.1",
+    "typescript": "^5.6.2"
+  }
+}
