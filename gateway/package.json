@@ -11,7 +11,7 @@
     "fix": "bun gql-gen && bun run check --write",
     "test": "bun gql-gen && bun test",
     "test:watch": "bun gql-gen && bun test --watch",
-    "gql-gen": "graphql-codegen --config codegen.ts"
+    "gql-gen": "graphql-codegen --config codegen.ts -r dotenv/config"
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",
@@ -30,6 +30,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.0",
+    "zod": "^3.23.8",
     "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {
@@ -42,6 +43,7 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
+    "dotenv": "^16.4.5",
     "globals": "^15.9.0",
     "ts-pattern": "^5.3.1",
     "typescript": "^5.5.3",

@@ -3,11 +3,12 @@ import type {CodegenConfig} from '@graphql-codegen/cli'
 const config: CodegenConfig = {
   overwrite: true,
   schema: {
-    'https://api.mainnet.wingriders.com/graphql': {
-      headers: {
-        'user-agent': 'graphql-codegen',
+    [`${process.env.VITE_API_SERVER_URL_PREPROD || 'https://api.preprod.wingriders.com'}/graphql`]:
+      {
+        headers: {
+          'user-agent': 'graphql-codegen',
+        },
       },
-    },
   },
   documents: ['src/**/*.ts', 'src/**/*.tsx'],
   generates: {
