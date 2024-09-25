@@ -1,18 +1,19 @@
 import type {Address as HexAddress, UInt} from '@wingriders/cab/dappConnector'
-import {normalizeValue} from '@wingriders/cab/wallet/connector'
+import {
+  aggregateTokenBundles,
+  tokenBundleToValue,
+} from '@wingriders/cab/ledger/assets'
+import {CborizedTxDatum} from '@wingriders/cab/ledger/transaction'
 import {
   type Address,
   BigNumber,
   Language,
   Lovelace,
   NetworkName,
+  type TxInputRef,
   type UTxO,
 } from '@wingriders/cab/types'
-import {
-  aggregateTokenBundles,
-  tokenBundleToValue,
-} from '@wingriders/cab/ledger/assets'
-import {CborizedTxDatum} from '@wingriders/cab/ledger/transaction'
+import {normalizeValue} from '@wingriders/cab/wallet/connector'
 
 export const MOCKED_WALLET_NAME = 'WingRiders'
 export const MOCKED_WALLET_VERSION = '0.0.1'
@@ -120,14 +121,7 @@ export const MOCKED_VALUE = normalizeValue<UInt>(
     BigNumber.sum(...MOCKED_UTXOS.map((utxo) => utxo.coins)) as Lovelace,
   ),
 )
-export const MOCKED_COLLATERAL_UTXOS: UTxO[] = [
-  {
-    address:
-      'addr_test1qz68clqv5g66rzqq8l0ru6jcx9q63yf97dr9w2ac06q6supfvmwlrkk0q3k4yjpn3yt5wy7zz23m2jfhp7vkqejkjfgsg0pq9r' as Address,
-    coins: new Lovelace(5_000_000) as Lovelace,
-    tokenBundle: [],
-    outputIndex: 1,
-    txHash: '7fe4542778158ad7a9a3ca9824461a30324a22160b63aaa578ec8754fa18cb5a',
-    inlineDatum: false,
-  },
-]
+export const MOCKED_COLLATERAL_UTXO_REF: TxInputRef = {
+  txHash: '7fe4542778158ad7a9a3ca9824461a30324a22160b63aaa578ec8754fa18cb5a',
+  outputIndex: 1,
+}
