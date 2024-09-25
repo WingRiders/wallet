@@ -34,6 +34,12 @@
       "suspicious": {
         "noExplicitAny": {
           "level": "off"
+        },
+        "noConsole": {
+          "level": "warn",
+          "options": {
+            "allow": ["warn", "error"]
+          }
         }
       }
     }

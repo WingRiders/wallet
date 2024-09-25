@@ -50,6 +50,7 @@ export class DataApi implements IDataApi {
   }
 
   async submitTx(tx: CborHexString): Promise<HexString> {
+    // biome-ignore lint/suspicious/noConsole: <explanation>
     console.log('Transaction submitted', tx)
     return '' as HexString
   }

@@ -19,6 +19,7 @@ export const MOCKED_DATA_API: IDataApi = {
     return MOCKED_UTXOS
   },
   async submitTx(tx: CborHexString): Promise<HexString> {
+    // biome-ignore lint/suspicious/noConsole: <explanation>
     console.log('Transaction submitted', tx)
     return '' as HexString
   },
@@ -39,6 +40,7 @@ export const MOCKED_WALLET_GATEWAY: IWalletGateway = {
     tx: CborHexString,
     _partialSign?: boolean,
   ): Promise<CborHexString> {
+    // biome-ignore lint/suspicious/noConsole: <explanation>
     console.log('Transaction signed')
     return tx
   },
@@ -46,6 +48,7 @@ export const MOCKED_WALLET_GATEWAY: IWalletGateway = {
     _addr: CborHexString,
     _sigStructure: CborHexString,
   ): Promise<HexString> {
+    // biome-ignore lint/suspicious/noConsole: <explanation>
     console.log('Data signed')
     return '' as HexString
   },
