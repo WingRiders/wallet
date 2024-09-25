@@ -20,6 +20,7 @@ export const initDappPlugin = (options: InitDappPluginOptions) => {
     getDataApi: (network) =>
       new DataApi({
         cabBackendUrl: options.cabBackendUrlByNetwork[network],
+        network,
       }),
     name: 'WingRiders',
     apiVersion: '0.0.1',

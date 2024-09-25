@@ -1,24 +1,35 @@
 import type {Address as HexAddress} from '@wingriders/cab/dappConnector'
-import {makeNonNullable} from '@wingriders/cab/helpers'
+import {makeNonNullable, networkNameToNetworkId} from '@wingriders/cab/helpers'
 import {Address, addressToBechAddress} from '@wingriders/cab/ledger/plutus'
-import {
-  type Address as BechAddress,
-  type BestSlotResponse,
-  type HexString,
-  type HostedPoolMetadata,
-  type IBlockchainExplorer,
-  NetworkId,
-  type ProtocolParameters,
-  type StakingInfoResponse,
-  type TxBlockInfo,
-  type TxSubmission,
-  type UTxO,
+import type {
+  Address as BechAddress,
+  BestSlotResponse,
+  HexString,
+  HostedPoolMetadata,
+  IBlockchainExplorer,
+  NetworkName,
+  ProtocolParameters,
+  StakingInfoResponse,
+  TxBlockInfo,
+  TxSubmission,
+  UTxO,
 } from '@wingriders/cab/types'
 import {parseOgmiosProtocolParameters} from '../protocolParameters'
 import {type UTxOResponse, parseUTxOResponse} from './parse'
 
+type CabBackendExplorerProps = {
+  url: string
+  network: NetworkName
+}
+
 export class CabBackendExplorer implements IBlockchainExplorer {
-  constructor(private readonly url: string) {}
+  private readonly url: string
+  private readonly network: NetworkName
+
+  constructor({url, network}: CabBackendExplorerProps) {
+    this.url = url
+    this.network = network
+  }
 
   async fetchUnspentTxOutputs(addresses: Array<BechAddress>): Promise<UTxO[]> {
     if (addresses.length === 0) return []
@@ -64,7 +75,7 @@ export class CabBackendExplorer implements IBlockchainExplorer {
       usedAddresses.map(({address}) =>
         addressToBechAddress(
           Address.fromAddressHex(address),
-          NetworkId.PREPROD,
+          networkNameToNetworkId[this.network],
         ),
       ),
     )

@@ -18,7 +18,10 @@ type InitWalletProps = {
 
 export const initWallet = async ({mnemonic, network}: InitWalletProps) => {
   const wallet = new Wallet({
-    blockchainExplorer: new CabBackendExplorer(cabServerUrlByNetwork[network]),
+    blockchainExplorer: new CabBackendExplorer({
+      url: cabServerUrlByNetwork[network],
+      network,
+    }),
     cryptoProvider: new JsCryptoProvider({
       walletSecretDef: await mnemonicToWalletSecretDef(mnemonic),
       network: NETWORKS[network],
