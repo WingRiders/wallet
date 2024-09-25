@@ -2,18 +2,14 @@ import {LoadingButton} from '@mui/lab'
 import {NETWORKS} from '@wingriders/cab/constants'
 import type {HexString, TxHash} from '@wingriders/cab/dappConnector'
 import {adaToLovelace} from '@wingriders/cab/helpers'
-import {
-  BigNumber,
-  type Lovelace,
-  NetworkName,
-  type TxPlanArgs,
-} from '@wingriders/cab/types'
+import {BigNumber, type Lovelace, type TxPlanArgs} from '@wingriders/cab/types'
 import type {Wallet} from '@wingriders/cab/wallet'
 import {WalletConnector, reverseAddress} from '@wingriders/cab/wallet/connector'
 import {useState} from 'react'
 import {EnterPasswordModal} from '../components/EnterPasswordModal'
 import {buildTx, signTx} from '../helpers/actions'
 import {getWalletOwner} from '../helpers/wallet'
+import {useCreatedWalletStore} from '../store/createdWallet'
 import {useWalletDataStore} from '../store/walletData'
 import type {ResultType} from '../types'
 
@@ -28,6 +24,7 @@ export const SetCollateralButton = ({onCreate}: SetCollateralButtonProps) => {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
 
   const setCollateral = useWalletDataStore((s) => s.setCollateral)
+  const network = useCreatedWalletStore((s) => s.network)
 
   const handleCreate = async (wallet: Wallet) => {
     try {
@@ -54,7 +51,7 @@ export const SetCollateralButton = ({onCreate}: SetCollateralButtonProps) => {
       const {tx, txAux, txWitnessSet} = await buildTx({
         jsApi,
         planArgs,
-        network: NETWORKS[NetworkName.PREPROD],
+        network: NETWORKS[network],
       })
       const {cborizedTx, txHash} = await signTx({
         jsApi,

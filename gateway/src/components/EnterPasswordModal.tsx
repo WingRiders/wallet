@@ -8,10 +8,10 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material'
-import {NetworkName} from '@wingriders/cab/types'
 import type {Wallet} from '@wingriders/cab/wallet'
 import {useEffect} from 'react'
 import {type SubmitHandler, useForm} from 'react-hook-form'
+import {useShallow} from 'zustand/shallow'
 import {decryptData} from '../helpers/encryption'
 import {getTextFieldErrorFields} from '../helpers/forms'
 import {initWallet} from '../helpers/wallet'
@@ -32,7 +32,9 @@ export const EnterPasswordModal = ({
   onClose,
   onLogin,
 }: EnterPasswordModalProps) => {
-  const createdWallet = useCreatedWalletStore((s) => s.createdWallet)
+  const {createdWallet, network} = useCreatedWalletStore(
+    useShallow(({createdWallet, network}) => ({createdWallet, network})),
+  )
 
   const {
     register,
@@ -68,7 +70,7 @@ export const EnterPasswordModal = ({
     try {
       const {wallet} = await initWallet({
         mnemonic,
-        network: NetworkName.PREPROD,
+        network,
       })
       onLogin(wallet)
       onClose()

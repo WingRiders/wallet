@@ -15,6 +15,7 @@ export type WalletDataState = {
   collateral: TxInputRef | null
   setWalletData: (walletData: WalletData | null) => void
   setCollateral: (collateral: TxInputRef | null) => void
+  clear: () => void
 }
 
 export const useWalletDataStore = create<WalletDataState>()(
@@ -24,6 +25,7 @@ export const useWalletDataStore = create<WalletDataState>()(
       collateral: null,
       setWalletData: (walletData) => set({walletData}),
       setCollateral: (collateral) => set({collateral}),
+      clear: () => set({walletData: null, collateral: null}),
     }),
     {
       name: 'wallet-data',

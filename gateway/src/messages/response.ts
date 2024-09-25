@@ -1,7 +1,7 @@
 import type {Account} from '@wingriders/cab/account'
 import type {CborHexString} from '@wingriders/cab/dappConnector'
 import {cborizeTxWitnesses} from '@wingriders/cab/ledger/transaction'
-import {NetworkName, type TxInputRef} from '@wingriders/cab/types'
+import type {NetworkName, TxInputRef} from '@wingriders/cab/types'
 import {normalizeAddress, reverseTx} from '@wingriders/cab/wallet/connector'
 import {
   type ConcreteMessage,
@@ -30,6 +30,7 @@ export const getResponseMessageType = (requestType: MessageType) => {
 export const getInitResponseMessage = (
   initRequestMessage: ConcreteMessage<'INIT_REQUEST'>,
   account: Account,
+  network: NetworkName,
   collateralUtxoRef: TxInputRef | null,
 ) => {
   const walletData = getWalletData(account)
@@ -40,7 +41,7 @@ export const getInitResponseMessage = (
     result: {
       isSuccess: true,
       data: {
-        network: NetworkName.PREPROD,
+        network,
         usedAddresses: walletData.usedAddresses.map(normalizeAddress),
         unusedAddresses: walletData.unusedAddresses.map(normalizeAddress),
         changeAddress: normalizeAddress(walletData.changeAddress),
