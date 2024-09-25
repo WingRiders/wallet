@@ -1,0 +1,17 @@
+services:
+  gateway-server:
+    container_name: gateway-server
+    build:
+      context: ../
+      dockerfile: gateway-server/Dockerfile
+    ports:
+      - ${GATEWAY_SERVER_PORT}:4000
+    environment:
+      NODE_ENV: production
+      PORT: ${GATEWAY_SERVER_PORT}
+      API_SERVER_PUBLIC_URL_PREPROD: ${API_SERVER_PUBLIC_URL_PREPROD}
+      API_SERVER_PUBLIC_URL_MAINNET: ${API_SERVER_PUBLIC_URL_MAINNET}
+      CAB_SERVER_PUBLIC_URL_PREPROD: ${CAB_SERVER_PUBLIC_URL_PREPROD}
+      CAB_SERVER_PUBLIC_URL_MAINNET: ${CAB_SERVER_PUBLIC_URL_MAINNET}
+      BASIC_AUTH_USERS: ${GATEWAY_SERVER_BASIC_AUTH_USERS}
+      CORS_ENABLED_FOR: ${GATEWAY_SERVER_CORS_ENABLED_FOR}
