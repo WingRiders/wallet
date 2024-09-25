@@ -23,6 +23,12 @@ app.onAfterHandle(({set}) => {
     'max-age=63072000; includeSubDomains; preload'
 })
 
+app.get('/healthcheck', () => {
+  return {
+    healthy: true,
+  }
+})
+
 app.get('*', () => {
   const indexPath = join(__dirname, '../../gateway/dist/index.html')
   let indexContent = readFileSync(indexPath, 'utf-8')

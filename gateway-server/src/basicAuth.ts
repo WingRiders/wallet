@@ -4,7 +4,10 @@ export const registerBasicAuth = (
   app: Elysia,
   users: Record<string, string>,
 ) => {
-  app.onBeforeHandle(({headers}) => {
+  app.onBeforeHandle(({headers, path}) => {
+    // allow healthcheck without auth
+    if (path === '/healthcheck') return
+
     const basicAuth = headers.authorization
 
     if (basicAuth) {
