@@ -1,0 +1,14 @@
+{
+  "name": "@wingriders/wallet",
+  "workspaces": ["dapp-plugin", "gateway", "example-app"],
+  "scripts": {
+    "build": "turbo build",
+    "check": "turbo check",
+    "fix": "turbo fix"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "turbo": "^2.1.2"
+  },
+  "packageManager": "bun@1.1.27"
+}

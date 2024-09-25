@@ -1,0 +1,23 @@
+{
+  "name": "@wingriders/wallet-dapp-plugin",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "files": ["dist"],
+  "scripts": {
+    "build": "rollup -c",
+    "check": "bun biome check src",
+    "fix": "bun run check --write"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.1",
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup": "^4.21.3",
+    "rollup-plugin-dts": "^6.1.1",
+    "tslib": "^2.7.0",
+    "typescript": "^5.6.2"
+  }
+}
