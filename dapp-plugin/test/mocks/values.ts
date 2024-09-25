@@ -1,4 +1,4 @@
-import type {Address as HexAddress} from '@wingriders/cab/dappConnector'
+import type {Address as HexAddress, UInt} from '@wingriders/cab/dappConnector'
 import {normalizeValue} from '@wingriders/cab/wallet/connector'
 import {
   type Address,
@@ -114,7 +114,7 @@ export const MOCKED_UTXOS: UTxO[] = [
     inlineDatum: false,
   },
 ]
-export const MOCKED_VALUE = normalizeValue(
+export const MOCKED_VALUE = normalizeValue<UInt>(
   tokenBundleToValue(
     aggregateTokenBundles(MOCKED_UTXOS.map((utxo) => utxo.tokenBundle)),
     BigNumber.sum(...MOCKED_UTXOS.map((utxo) => utxo.coins)) as Lovelace,
