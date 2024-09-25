@@ -10,9 +10,13 @@
     "check": "bun biome check src",
     "fix": "bun run check --write"
   },
+  "dependencies": {
+    "@wingriders/cab": "^2.0.28"
+  },
   "devDependencies": {
     "@biomejs/biome": "1.9.1",
     "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",
     "rollup": "^4.21.3",

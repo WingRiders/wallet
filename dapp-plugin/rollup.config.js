@@ -2,6 +2,7 @@ import dts from 'rollup-plugin-dts'
 import commonjs from '@rollup/plugin-commonjs'
 import typescript from '@rollup/plugin-typescript'
 import resolve from '@rollup/plugin-node-resolve'
+import json from '@rollup/plugin-json'
 
 import packageJson from './package.json' assert {type: 'json'}
 
@@ -22,7 +23,8 @@ export default [
     ],
     plugins: [
       commonjs(),
-      resolve(),
+      json(),
+      resolve({preferBuiltins: false}),
       typescript({exclude: ['**/__tests__', '**/*.test.ts']}),
     ],
   },
