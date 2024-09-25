@@ -5,14 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite --open",
-    "build": "tsc -b && vite build",
+    "build": "bun gql-gen && tsc -b && vite build",
     "preview": "vite preview",
-    "check": "bun biome check src",
-    "fix": "bun run check --write",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "check": "bun gql-gen && bun biome check src",
+    "fix": "bun gql-gen && bun run check --write",
+    "test": "bun gql-gen && vitest run",
+    "test:watch": "bun gql-gen && vitest",
+    "gql-gen": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
+    "@apollo/client": "^3.11.8",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@fontsource/roboto": "^5.1.0",
@@ -21,6 +23,7 @@
     "@mui/material": "^6.1.0",
     "@tanstack/react-router": "^1.57.18",
     "@wingriders/cab": "^2.0.28",
+    "graphql": "^16.9.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.0",
@@ -28,6 +31,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.1",
+    "@graphql-codegen/cli": "5.0.2",
+    "@graphql-codegen/client-preset": "4.3.3",
     "@rollup/plugin-inject": "^5.0.5",
     "@tanstack/router-plugin": "^1.57.15",
     "@types/react": "^18.3.3",

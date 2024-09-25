@@ -4,7 +4,13 @@
     "enabled": true
   },
   "files": {
-    "ignore": ["dist", "node_modules", ".turbo", "routeTree.gen.ts"]
+    "ignore": [
+      "dist",
+      "node_modules",
+      ".turbo",
+      "routeTree.gen.ts",
+      "graphql/generated"
+    ]
   },
   "formatter": {
     "indentStyle": "space"

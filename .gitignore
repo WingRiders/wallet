@@ -176,3 +176,6 @@ dist
 
 # Turborepo
 .turbo
+
+# GraphQL codegen
+**/graphql/generated
