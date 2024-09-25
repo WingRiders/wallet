@@ -4,7 +4,7 @@
     "enabled": true
   },
   "files": {
-    "ignore": ["dist", "node_modules", ".turbo"]
+    "ignore": ["dist", "node_modules", ".turbo", "routeTree.gen.ts"]
   },
   "formatter": {
     "indentStyle": "space"
