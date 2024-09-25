@@ -1,8 +1,8 @@
-import dts from 'rollup-plugin-dts'
 import commonjs from '@rollup/plugin-commonjs'
-import typescript from '@rollup/plugin-typescript'
-import resolve from '@rollup/plugin-node-resolve'
 import json from '@rollup/plugin-json'
+import resolve from '@rollup/plugin-node-resolve'
+import typescript from '@rollup/plugin-typescript'
+import dts from 'rollup-plugin-dts'
 
 import packageJson from './package.json' assert {type: 'json'}
 
@@ -24,12 +24,12 @@ export default [
     plugins: [
       commonjs(),
       json(),
-      resolve({preferBuiltins: false}),
+      resolve({browser: true, preferBuiltins: false}),
       typescript({exclude: ['**/__tests__', '**/*.test.ts']}),
     ],
   },
   {
-    input: './dist/index.d.ts',
+    input: './dist/src/index.d.ts',
     output: [{file: packageJson.types, format: 'esm'}],
     plugins: [dts()],
   },

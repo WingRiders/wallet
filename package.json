@@ -1,6 +1,11 @@
 {
   "name": "@wingriders/wallet",
-  "workspaces": ["dapp-plugin", "gateway", "example-app"],
+  "workspaces": [
+    "dapp-plugin",
+    "gateway",
+    "example-app",
+    "common"
+  ],
   "scripts": {
     "build": "turbo build",
     "check": "turbo check",

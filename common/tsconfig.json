@@ -9,11 +9,9 @@
     "moduleResolution": "Bundler",
     "strict": true,
     "noUncheckedIndexedAccess": true,
-    "emitDeclarationOnly": true,
     "resolveJsonModule": true,
     "composite": true
   },
-  "include": ["src", "declarations.d.ts"],
-  "exclude": ["node_modules", "**/*.test.ts"],
-  "references": [{ "path": "../common" }]
+  "include": ["src"],
+  "exclude": ["node_modules", "**/*.test.ts"]
 }
