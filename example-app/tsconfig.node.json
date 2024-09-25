@@ -16,7 +16,12 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    "paths": {
+      "@wingriders/wallet-dapp-plugin": ["../dapp-plugin/src"]
+    }
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts"],
+  "references": [{ "path": "../dapp-plugin" }]
 }
