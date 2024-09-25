@@ -17,7 +17,8 @@
   "dependencies": {
     "@wingriders/cab": "^2.0.28",
     "@wingriders/wallet-common": "workspace:*",
-    "borc": "^3.0.0"
+    "borc": "^3.0.0",
+    "nanoid": "^5.0.7"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.1",
