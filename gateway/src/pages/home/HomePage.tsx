@@ -3,6 +3,7 @@ import {Grid2, Stack, Typography} from '@mui/material'
 import {AdaAsset} from '@wingriders/cab/constants'
 import {assetId} from '@wingriders/cab/helpers'
 import {tokenToAsset} from '@wingriders/cab/ledger/assets'
+import {CollateralPanel} from '../../collateral/CollateralPanel'
 import {AssetQuantityDisplay} from '../../components/AssetQuantityDisplay'
 import {Page} from '../../components/Page'
 import {assetsMetadataQuery} from '../../metadata/queries'
@@ -40,6 +41,10 @@ export const HomePage = () => {
             <Typography variant="body1">
               {walletData.usedAddresses[0]}
             </Typography>
+          </Section>
+
+          <Section title="Collateral">
+            <CollateralPanel />
           </Section>
 
           <Section title="Tokens">

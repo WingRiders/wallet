@@ -1,5 +1,6 @@
-import type {Address, UTxO} from '@wingriders/cab/types'
+import type {Address, TxInputRef, UTxO} from '@wingriders/cab/types'
 import {create} from 'zustand'
+import {persist} from 'zustand/middleware'
 
 export type WalletData = {
   usedAddresses: Address[]
@@ -11,10 +12,24 @@ export type WalletData = {
 
 export type WalletDataState = {
   walletData: WalletData | null
+  collateral: TxInputRef | null
   setWalletData: (walletData: WalletData | null) => void
+  setCollateral: (collateral: TxInputRef | null) => void
 }
 
-export const useWalletDataStore = create<WalletDataState>((set) => ({
-  walletData: null,
-  setWalletData: (walletData) => set({walletData}),
-}))
+export const useWalletDataStore = create<WalletDataState>()(
+  persist(
+    (set) => ({
+      walletData: null,
+      collateral: null,
+      setWalletData: (walletData) => set({walletData}),
+      setCollateral: (collateral) => set({collateral}),
+    }),
+    {
+      name: 'wallet-data',
+      partialize: (state) => ({
+        collateral: state.collateral,
+      }),
+    },
+  ),
+)
