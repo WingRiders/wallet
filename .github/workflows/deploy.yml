@@ -39,7 +39,6 @@ on:
     secrets:
       aws-region:
         description: AWS Region
-        type: string
         required: true
       aws-access-key-id:
         description: AWS Access key ID
