@@ -3,10 +3,6 @@ name: Build and deploy
 on:
   workflow_call:
     inputs:
-      aws-region:
-        description: AWS Region
-        type: string
-        required: true
       environment:
         description: Environment (preprod/mainnet)
         type: string
@@ -41,6 +37,10 @@ on:
         required: false
 
     secrets:
+      aws-region:
+        description: AWS Region
+        type: string
+        required: true
       aws-access-key-id:
         description: AWS Access key ID
         required: true
@@ -75,7 +75,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.aws-access-key-id }}
           aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
-          aws-region: ${{ inputs.aws-region }}
+          aws-region: ${{ secrets.aws-region }}
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -84,7 +84,7 @@ jobs:
       - name: Check if Docker image is already present
         id: check-docker-image
         run: |
-          IMAGE_SHA=$(aws ecr list-images --region ${{ inputs.aws-region }} --repository-name ${{ env.ECR_REPOSITORY }} --query "imageIds[?imageTag=='${{ github.sha }}'].imageTag" --output text)
+          IMAGE_SHA=$(aws ecr list-images --region ${{ secrets.aws-region }} --repository-name ${{ env.ECR_REPOSITORY }} --query "imageIds[?imageTag=='${{ github.sha }}'].imageTag" --output text)
           echo "DOCKER_IMAGE_SHA=${IMAGE_SHA}" >> $GITHUB_OUTPUT
           [[ -n ${IMAGE_SHA} ]] && echo "Docker image ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }} found, skipping following Docker build steps." || :
         env:
@@ -144,7 +144,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.aws-access-key-id }}
           aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
-          aws-region: ${{ inputs.aws-region }}
+          aws-region: ${{ secrets.aws-region }}
 
       - name: Download task definition
         run: |

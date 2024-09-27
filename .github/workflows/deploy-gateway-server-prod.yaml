@@ -1,0 +1,29 @@
+name: 'Prod: Deploy Gateway Server'
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'gateway/**'
+      - 'gateway-server/**'
+      - '.github/workflows/deploy.yml'
+      - '.github/workflows/deploy-gateway-server-prod.yaml'
+
+concurrency: gateway_server_prod
+
+jobs:
+  deploy:
+    if: github.repository == 'WingRiders/wallet' # Perform execution only in the public repo
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: mainnet
+      service: wallet-gateway-server
+      deploy: true
+      working_directory: .
+      dockerfile: gateway-server/Dockerfile
+    secrets:
+      aws-region: ${{ secrets.AWS_REGION }}
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
