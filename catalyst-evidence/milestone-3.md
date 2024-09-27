@@ -24,16 +24,16 @@ You can now close this window.
 
 Visit https://wallet-example-app.wingriders.com and click on the `CONNECT WINGRIDERS WALLET` button. You will be redirected to the gateway application where you can accept the connection request.
 
-After the wallet is created, you can use the example application to:
+After the wallet is connected, you can use the example application to:
 
 - view your balance
 - view your address
 - view your UTxOs
-- create an example transactions
+- create an example transaction
 
 ### 3. Create an example transaction
 
-After you connect to the WingRiders wallet in the example application, click on the `CREATE EXAMPLE TRANSACTION` button. This action will built a transaction where you will send 2 ADA to yourself.
+After you connect to the WingRiders wallet in the example application, click on the `CREATE EXAMPLE TRANSACTION` button. This action will build a transaction which sends 2 ADA to yourself.
 
 After the transaction is built, you will be redirected to the gateway application, where you can sign the transaction.
 
