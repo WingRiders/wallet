@@ -1,24 +1,29 @@
 import {LoadingButton} from '@mui/lab'
-import {Alert, Stack} from '@mui/material'
-import {NETWORKS} from '@wingriders/cab/constants'
+import {Alert, Stack, Typography} from '@mui/material'
+import {ADA_DECIMALS, AdaAsset, NETWORKS} from '@wingriders/cab/constants'
 import type {
   HexString,
   JsAPI,
   StandardWallet as StandardWalletApi,
   TxHash,
 } from '@wingriders/cab/dappConnector'
+import {assetQuantity} from '@wingriders/cab/ledger/assets'
 import {
   BigNumber,
   type Lovelace,
   NetworkName,
   type TxPlanArgs,
+  type UTxO,
 } from '@wingriders/cab/types'
 import {
   CborToJsApiBridge,
   reverseAddress,
+  reverseUtxos,
+  reverseValue,
 } from '@wingriders/cab/wallet/connector'
 import {initDappPlugin} from '@wingriders/wallet-dapp-plugin'
 import {useState} from 'react'
+import {Section} from './components/Section'
 import {config} from './config'
 import {buildTx, signTx} from './helpers/actions'
 import {getWalletOwner} from './helpers/wallet'
@@ -32,7 +37,12 @@ declare const window: typeof globalThis.window & {
 }
 
 export const App = () => {
-  const [jsApi, setJsApi] = useState<JsAPI | null>(null)
+  const [walletData, setWalletData] = useState<{
+    jsApi: JsAPI
+    lovelaceBalance: BigNumber
+    address: string
+    utxos: UTxO[]
+  } | null>(null)
   const [exampleTxResult, setExampleTxResult] = useState<{
     isSuccess: boolean
     message: string
@@ -58,7 +68,12 @@ export const App = () => {
 
       const cborApi = await wrWallet.enable()
       const jsApi = new CborToJsApiBridge(cborApi)
-      setJsApi(jsApi)
+      const balanceValue = reverseValue(await jsApi.getBalance())
+      const lovelaceBalance = assetQuantity(balanceValue, AdaAsset)
+      const address = reverseAddress(await getWalletOwner(jsApi))
+      const utxos = reverseUtxos(await jsApi.getUtxos())
+
+      setWalletData({jsApi, lovelaceBalance, address, utxos})
       setIsLoadingConnect(false)
     } catch (e) {
       setIsLoadingConnect(false)
@@ -67,15 +82,15 @@ export const App = () => {
   }
 
   const handleDisconnectWallet = () => {
-    setJsApi(null)
+    setWalletData(null)
   }
 
   const handleCreateExampleTransaction = async () => {
-    if (!jsApi) return
+    if (!walletData) return
 
     try {
       setIsLoadingExampleTx(true)
-      const ownerHexAddress = await getWalletOwner(jsApi)
+      const ownerHexAddress = await getWalletOwner(walletData.jsApi)
       const ownerBechAddress = reverseAddress(ownerHexAddress)
       const protocolParameters = await getCachedProtocolParameters()
 
@@ -92,17 +107,17 @@ export const App = () => {
       }
 
       const {tx, txAux, txWitnessSet} = await buildTx({
-        jsApi,
+        jsApi: walletData.jsApi,
         planArgs,
         network: NETWORKS[NetworkName.PREPROD],
       })
       const {cborizedTx} = await signTx({
-        jsApi,
+        jsApi: walletData.jsApi,
         tx,
         txAux,
         txWitnessSet,
       })
-      const txHash = await jsApi.submitRawTx(
+      const txHash = await walletData.jsApi.submitRawTx(
         cborizedTx.txBody as HexString,
         cborizedTx.txHash as TxHash,
       )
@@ -126,15 +141,28 @@ export const App = () => {
   return (
     <Stack alignItems="flex-start" spacing={4} p={3}>
       <LoadingButton
-        variant={jsApi ? 'outlined' : 'contained'}
-        onClick={jsApi ? handleDisconnectWallet : handleConnectWallet}
+        variant={walletData?.jsApi ? 'outlined' : 'contained'}
+        onClick={
+          walletData?.jsApi ? handleDisconnectWallet : handleConnectWallet
+        }
         loading={isLoadingConnect}
       >
-        {jsApi ? 'Disconnect wallet' : 'Connect WingRiders wallet'}
+        {walletData?.jsApi ? 'Disconnect wallet' : 'Connect WingRiders wallet'}
       </LoadingButton>
 
-      {jsApi && (
-        <Stack alignItems="flex-start" spacing={1}>
+      {walletData && (
+        <Stack alignItems="flex-start" spacing={2}>
+          <Section title="ADA balance">
+            <Typography variant="body1">
+              {walletData.lovelaceBalance.shiftedBy(-ADA_DECIMALS).toFormat()}{' '}
+              ADA
+            </Typography>
+          </Section>
+
+          <Section title="Address">
+            <Typography variant="body1">{walletData.address}</Typography>
+          </Section>
+
           <LoadingButton
             onClick={handleCreateExampleTransaction}
             variant="contained"
@@ -151,6 +179,24 @@ export const App = () => {
               {exampleTxResult.message}
             </Alert>
           )}
+
+          <Section title="UTxOs">
+            <Stack spacing={2}>
+              {walletData.utxos.map(
+                ({txHash, outputIndex, coins, tokenBundle}) => (
+                  <Stack key={`${txHash}#${outputIndex}`}>
+                    <Typography variant="body2">
+                      {txHash}#{outputIndex}
+                    </Typography>
+                    <Typography variant="body1">
+                      {coins.shiftedBy(-ADA_DECIMALS).toFormat()} ADA
+                      {tokenBundle.length > 0 && ' + tokens'}
+                    </Typography>
+                  </Stack>
+                ),
+              )}
+            </Stack>
+          </Section>
         </Stack>
       )}
     </Stack>
