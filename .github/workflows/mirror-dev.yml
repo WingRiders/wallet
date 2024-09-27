@@ -9,7 +9,7 @@ on:
 jobs:
   mirror:
     if: github.repository != 'WingRiders/wallet' # Prevent execution in the public repo
-    uses: WingRiders/wallet-private/.github/workflows/mirror.yml@main
+    uses: ./.github/workflows/mirror.yml
     with:
       branch: dev
     secrets:
