@@ -22,7 +22,7 @@
     "@mui/lab": "^6.0.0-beta.10",
     "@mui/material": "^6.1.0",
     "@tanstack/react-router": "^1.57.18",
-    "@wingriders/cab": "^2.0.28",
+    "@wingriders/cab": "^2.0.29",
     "@wingriders/wallet-common": "workspace:*",
     "borc": "^3.0.0",
     "date-fns": "^4.1.0",
