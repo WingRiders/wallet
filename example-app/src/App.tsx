@@ -168,7 +168,7 @@ export const App = () => {
             variant="contained"
             loading={isLoadingExampleTx}
           >
-            Create example transaction example
+            Create example transaction
           </LoadingButton>
 
           {exampleTxResult && (
