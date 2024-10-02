@@ -1,4 +1,4 @@
-import type {CborHexString, HexString} from '@wingriders/cab/dappConnector'
+import type {CborHexString, DataSignature} from '@wingriders/cab/dappConnector'
 import {MessageType} from '@wingriders/wallet-common'
 import {nanoid} from 'nanoid'
 import {sendGatewayMessageAndWaitForResponse} from '../messages/send'
@@ -68,17 +68,17 @@ export class WalletGateway implements IWalletGateway {
   }
 
   async signData(
-    addr: CborHexString,
-    sigStructure: CborHexString,
-  ): Promise<HexString> {
+    address: CborHexString,
+    payload: CborHexString,
+  ): Promise<DataSignature> {
     const signDataResponse = await sendGatewayMessageAndWaitForResponse(
       this.url,
       {
         type: MessageType.SIGN_DATA_REQUEST,
         initId: nanoid(),
         payload: {
-          addr,
-          sigStructure,
+          address,
+          payload,
         },
       },
       MessageType.SIGN_DATA_RESPONSE,
