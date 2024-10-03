@@ -7,7 +7,7 @@ const PROTOCOL_PARAMETERS_CACHE_TTL = 1000 * 60 * 60 // 1 hour
 
 const fetchProtocolParameters = async (network: NetworkName) => {
   const cabBackendExplorer = new CabBackendExplorer({
-    url: cabServerUrlByNetwork[network],
+    cabServerUrl: cabServerUrlByNetwork[network],
     network,
   })
   return cabBackendExplorer.getProtocolParameters()

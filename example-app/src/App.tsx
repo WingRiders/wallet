@@ -63,7 +63,7 @@ export const App = () => {
       setIsLoadingConnect(true)
       initDappPlugin({
         gatewayUrl: config.GATEWAY_URL,
-        cabBackendUrlByNetwork: {
+        cabServerUrlByNetwork: {
           preprod: config.CAB_SERVER_URL_PREPROD,
           mainnet: config.CAB_SERVER_URL_MAINNET,
         },
