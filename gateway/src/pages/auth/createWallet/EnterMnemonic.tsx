@@ -1,12 +1,10 @@
-import {Box, Button, Stack, TextField, Typography} from '@mui/material'
+import {Box, TextField} from '@mui/material'
 import {validateMnemonic as isMnemonicValid} from '@wingriders/cab/crypto'
 import {type SubmitHandler, useForm} from 'react-hook-form'
 import {useShallow} from 'zustand/shallow'
+import {FlowNavigation} from '../../../components/FlowNavigation'
 import {getTextFieldErrorFields} from '../../../helpers/forms'
-import {
-  CreateWalletStage,
-  useCreateWalletStore,
-} from '../../../store/createWallet'
+import {useCreateWalletStore} from '../../../store/createWallet'
 
 type Inputs = {
   mnemonic: string
@@ -15,13 +13,13 @@ type Inputs = {
 export const EnterMnemonic = () => {
   const {
     mnemonic: mnemonicInStore,
-    setMnemonic: setMnemonicInStore,
-    setCurrentStage,
+    submitMnemonic,
+    reset: resetCreateWalletStore,
   } = useCreateWalletStore(
-    useShallow(({mnemonic, setMnemonic, setCurrentStage}) => ({
+    useShallow(({mnemonic, submitMnemonic, reset}) => ({
       mnemonic,
-      setMnemonic,
-      setCurrentStage,
+      submitMnemonic,
+      reset,
     })),
   )
 
@@ -36,16 +34,11 @@ export const EnterMnemonic = () => {
   })
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    setMnemonicInStore(data.mnemonic)
-    setCurrentStage(CreateWalletStage.PASSWORD)
+    submitMnemonic(data.mnemonic)
   }
 
   return (
     <Box>
-      <Typography mb={3} variant="h5">
-        Enter your mnemonic
-      </Typography>
-
       <TextField
         {...register('mnemonic', {
           required: true,
@@ -61,11 +54,16 @@ export const EnterMnemonic = () => {
         {...getTextFieldErrorFields(errors.mnemonic)}
       />
 
-      <Stack direction="row" justifyContent="flex-end" mt={4}>
-        <Button variant="contained" onClick={handleSubmit(onSubmit)}>
-          Continue
-        </Button>
-      </Stack>
+      <FlowNavigation
+        backButtonOptions={{
+          label: 'Back',
+          onClick: resetCreateWalletStore,
+        }}
+        nextButtonOptions={{
+          label: 'Continue',
+          onClick: handleSubmit(onSubmit),
+        }}
+      />
     </Box>
   )
 }
