@@ -13,7 +13,7 @@ import {AppBackground} from './components/AppBackground'
 import {client} from './graphql/client'
 import {MessageListener} from './messages/MessageListener'
 import {useCreatedWalletStore} from './store/createdWallet'
-import {useWalletDataStore} from './store/walletData'
+import {selectIsLogin, useWalletDataStore} from './store/walletData'
 import {theme} from './theme'
 
 const router = createRouter({
@@ -29,7 +29,7 @@ declare module '@tanstack/react-router' {
 
 const RouterWithContext = () => {
   const hasCreatedWallet = useCreatedWalletStore((s) => s.createdWallet != null)
-  const isLogin = useWalletDataStore((s) => s.walletData != null)
+  const isLogin = useWalletDataStore(selectIsLogin)
 
   return (
     <RouterProvider
