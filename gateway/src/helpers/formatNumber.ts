@@ -14,6 +14,7 @@ export type FormatNumberOptions = {
   suffix?: string
   minDecimals?: number
   maxDecimals?: number
+  showSignIfPositive?: boolean
 } & (
   | {
       fixedDecimals?: undefined
@@ -46,7 +47,8 @@ export const formatBigNumber = (
     formattedNumber = number.toFormat(formatDecimals)
   }
 
-  return `${options.prefix ?? ''}${formattedNumber}${options.suffix ?? ''}`
+  const signPrefix = number.gt(0) && options.showSignIfPositive ? '+' : ''
+  return `${options.prefix ?? ''}${signPrefix}${formattedNumber}${options.suffix ?? ''}`
 }
 
 export const formatNumber = (

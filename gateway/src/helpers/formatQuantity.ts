@@ -14,6 +14,7 @@ export type FormatQuantityOptions = {
   fixedDecimals?: true
   maxDecimals?: number
   useNonBreakingSpace?: boolean
+  showSignIfPositive?: boolean
 }
 
 export const getAssetQuantityFormatter = (
@@ -32,6 +33,7 @@ export const getAssetQuantityFormatter = (
       useNonBreakingSpace,
       fixedDecimals,
       maxDecimals,
+      showSignIfPositive,
     }: FormatQuantityOptions = {},
   ) => {
     const realQuantity = quantity
@@ -42,6 +44,7 @@ export const getAssetQuantityFormatter = (
     return `${formatBigNumber(realQuantity, {
       maxDecimals: maxDecimals ?? decimals + extraDecimals,
       fixedDecimals,
+      showSignIfPositive,
     })}${showTicker && ticker ? `${space}${ticker}` : ''}${
       showSymbol && symbol ? `${space}${symbol}` : ''
     }`
