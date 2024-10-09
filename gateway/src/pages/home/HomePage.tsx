@@ -3,6 +3,7 @@ import {Grid2, Stack, Typography} from '@mui/material'
 import {AdaAsset} from '@wingriders/cab/constants'
 import {assetId} from '@wingriders/cab/helpers'
 import {tokenToAsset} from '@wingriders/cab/ledger/assets'
+import {useShallow} from 'zustand/shallow'
 import {CollateralPanel} from '../../collateral/CollateralPanel'
 import {AssetQuantityDisplay} from '../../components/AssetQuantityDisplay'
 import {Page} from '../../components/Page'
@@ -12,9 +13,11 @@ import {Section} from './Section'
 import {useWalletValue} from './helpers'
 
 export const HomePage = () => {
-  const walletData = useWalletDataStore((s) => s.walletData)
+  const {addresses, utxos} = useWalletDataStore(
+    useShallow(({addresses, utxos}) => ({addresses, utxos})),
+  )
 
-  const walletValue = useWalletValue(walletData)
+  const walletValue = useWalletValue(utxos)
 
   // prefetch metadata of all assets in the wallet
   useQuery(assetsMetadataQuery, {
@@ -27,7 +30,7 @@ export const HomePage = () => {
     <Page showHeader>
       <Typography variant="h3">Your wallet overview</Typography>
 
-      {walletValue && walletData && (
+      {walletValue && addresses && (
         <Stack spacing={3} mt={2}>
           <Section>
             <Typography variant="h4">
@@ -39,7 +42,7 @@ export const HomePage = () => {
 
           <Section title="Address">
             <Typography variant="body1">
-              {walletData.usedAddresses[0] ?? walletData.unusedAddresses[0]}
+              {addresses.usedAddresses[0] ?? addresses.unusedAddresses[0]}
             </Typography>
           </Section>
 

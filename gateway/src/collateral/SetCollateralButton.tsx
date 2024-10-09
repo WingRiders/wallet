@@ -23,7 +23,7 @@ export const SetCollateralButton = ({onCreate}: SetCollateralButtonProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
 
-  const setCollateral = useWalletDataStore((s) => s.setCollateral)
+  const setWalletData = useWalletDataStore((s) => s.setWalletData)
   const network = useCreatedWalletStore((s) => s.network)
 
   const handleCreate = async (wallet: Wallet) => {
@@ -63,7 +63,7 @@ export const SetCollateralButton = ({onCreate}: SetCollateralButtonProps) => {
         cborizedTx.txBody as HexString,
         cborizedTx.txHash as TxHash,
       )
-      setCollateral({txHash, outputIndex: 0})
+      setWalletData({collateral: {txHash, outputIndex: 0}})
       onCreate({isSuccess: true})
     } catch (e: any) {
       const message = e.message

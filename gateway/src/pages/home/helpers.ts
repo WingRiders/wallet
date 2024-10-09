@@ -1,13 +1,11 @@
 import {aggregateTokenBundles} from '@wingriders/cab/ledger/assets'
-import {BigNumber} from '@wingriders/cab/types'
+import {BigNumber, type UTxO} from '@wingriders/cab/types'
 import {useMemo} from 'react'
-import type {WalletData} from '../../store/walletData'
 
-export const useWalletValue = (walletData: WalletData | null) => {
+export const useWalletValue = (utxos: UTxO[] | null) => {
   const value = useMemo(() => {
-    if (!walletData) return undefined
+    if (!utxos) return undefined
 
-    const {utxos} = walletData
     const tokenBundle = aggregateTokenBundles(
       utxos.map((utxo) => utxo.tokenBundle),
     )
@@ -16,7 +14,7 @@ export const useWalletValue = (walletData: WalletData | null) => {
         ? BigNumber.sum(...utxos.map((utxo) => utxo.coins))
         : new BigNumber(0)
     return {tokenBundle, coins}
-  }, [walletData])
+  }, [utxos])
 
   return value
 }
