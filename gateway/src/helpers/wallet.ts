@@ -17,18 +17,20 @@ type InitWalletProps = {
 }
 
 export const initWallet = async ({mnemonic, network}: InitWalletProps) => {
+  const cryptoProvider = new JsCryptoProvider({
+    walletSecretDef: await mnemonicToWalletSecretDef(mnemonic),
+    network: NETWORKS[network],
+    config: {
+      shouldExportPubKeyBulk: true,
+    },
+  })
+
   const wallet = new Wallet({
     blockchainExplorer: new CabBackendExplorer({
       url: cabServerUrlByNetwork[network],
       network,
     }),
-    cryptoProvider: new JsCryptoProvider({
-      walletSecretDef: await mnemonicToWalletSecretDef(mnemonic),
-      network: NETWORKS[network],
-      config: {
-        shouldExportPubKeyBulk: true,
-      },
-    }),
+    cryptoProvider,
     config: {
       shouldExportPubKeyBulk: true,
       gapLimit: 10,
@@ -37,7 +39,7 @@ export const initWallet = async ({mnemonic, network}: InitWalletProps) => {
   await wallet.getAccountManager().addAccounts([0])
   const account = wallet.getAccount(0)
 
-  return {wallet, account}
+  return {wallet, account, cryptoProvider}
 }
 
 export const getWalletData = (account: Account): WalletData => {

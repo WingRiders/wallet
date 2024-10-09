@@ -1,3 +1,4 @@
+import type {JsCryptoProvider} from '@wingriders/cab/crypto'
 import {networkIdToNetworkName} from '@wingriders/cab/helpers'
 import type {Wallet} from '@wingriders/cab/wallet'
 import {
@@ -15,6 +16,7 @@ import {MessageDisplay} from './MessageDisplay'
 import {
   getInitResponseMessage,
   getResponseMessageType,
+  getSignDataResponseMessage,
   getSignTxResponseMessage,
 } from './response'
 
@@ -30,7 +32,10 @@ export const MessageHandler = () => {
     pendingRequestMessage.message.type,
   )
 
-  const handleLogin = async (wallet: Wallet) => {
+  const handleLogin = async (
+    wallet: Wallet,
+    cryptoProvider: JsCryptoProvider,
+  ) => {
     try {
       setIsLoading(true)
       const account = wallet.getAccount(0)
@@ -48,6 +53,12 @@ export const MessageHandler = () => {
         .when(
           (message) => isMessageWithType(message, MessageType.SIGN_TX_REQUEST),
           (message) => getSignTxResponseMessage(message, account),
+        )
+        .when(
+          (message) =>
+            isMessageWithType(message, MessageType.SIGN_DATA_REQUEST),
+          (message) =>
+            getSignDataResponseMessage(message, account, cryptoProvider),
         )
         .otherwise(() => null)
 
