@@ -13,12 +13,19 @@ const COLORS = {
   },
 }
 
+declare module '@mui/material/styles' {
+  interface TypeBackground {
+    body: string
+  }
+}
+
 export const theme = createTheme({
   palette: {
     mode: 'dark',
     background: {
       default: COLORS.neutral.gray7,
       paper: COLORS.neutral.gray6,
+      body: '#0A0C0C',
     },
   },
 })
