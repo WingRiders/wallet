@@ -12,7 +12,7 @@ import {EnterPasswordModal} from '../components/EnterPasswordModal'
 import {Page} from '../components/Page'
 import {useMessagesStore} from '../store/messages'
 import {useWalletDataStore} from '../store/walletData'
-import {MessageDisplay} from './MessageDisplay'
+import {MessageDisplay} from './display/MessageDisplay'
 import {
   getInitResponseMessage,
   getResponseMessageType,
