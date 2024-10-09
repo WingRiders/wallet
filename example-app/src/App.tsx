@@ -49,8 +49,14 @@ export const App = () => {
     isSuccess: boolean
     message: string
   } | null>(null)
+  const [signExampleDataResult, setSignExampleDataResult] = useState<{
+    isSuccess: boolean
+    message: string
+  } | null>(null)
   const [isLoadingConnect, setIsLoadingConnect] = useState(false)
   const [isLoadingExampleTx, setIsLoadingExampleTx] = useState(false)
+  const [isLoadingSignExampleData, setIsLoadingSignExampleData] =
+    useState(false)
 
   const handleConnectWallet = async () => {
     try {
@@ -143,6 +149,34 @@ export const App = () => {
     setIsLoadingExampleTx(false)
   }
 
+  const handleSignExampleData = async () => {
+    if (!walletData) return
+
+    try {
+      setIsLoadingSignExampleData(true)
+      const ownerHexAddress = await getWalletOwner(walletData.jsApi)
+      const signature = await walletData.jsApi.signData(
+        ownerHexAddress,
+        Buffer.from('WingRiders', 'utf-8').toString('hex') as HexString,
+      )
+
+      setSignExampleDataResult({
+        isSuccess: true,
+        message: `Example data signed: ${JSON.stringify(signature)}`,
+      })
+    } catch (e: any) {
+      const message = e.message
+      setSignExampleDataResult({
+        isSuccess: false,
+        message:
+          message && typeof message === 'string'
+            ? `Failed to sign data: ${e.message}`
+            : 'Failed to sign data',
+      })
+    }
+    setIsLoadingSignExampleData(false)
+  }
+
   return (
     <Stack alignItems="flex-start" spacing={2} p={3}>
       <LoadingButton
@@ -171,6 +205,29 @@ export const App = () => {
               severity={exampleTxResult.isSuccess ? 'success' : 'error'}
             >
               {exampleTxResult.message}
+            </Alert>
+          )}
+
+          <LoadingButton
+            onClick={handleSignExampleData}
+            variant="contained"
+            loading={isLoadingSignExampleData}
+          >
+            Sign example data
+          </LoadingButton>
+          {signExampleDataResult && (
+            <Alert
+              onClose={() => setSignExampleDataResult(null)}
+              severity={signExampleDataResult.isSuccess ? 'success' : 'error'}
+              sx={{maxWidth: '80vw'}}
+            >
+              <Typography
+                sx={{
+                  overflowWrap: 'break-word',
+                }}
+              >
+                {signExampleDataResult.message}
+              </Typography>
             </Alert>
           )}
 
