@@ -1,27 +1,49 @@
 import {create} from 'zustand'
 
+export enum CreateWalletOption {
+  CREATE = 'CREATE',
+  IMPORT = 'IMPORT',
+}
+
 export enum CreateWalletStage {
+  CHOOSE_OPTION = 'CHOOSE_OPTION',
   MNEMONIC = 'MNEMONIC',
   PASSWORD = 'PASSWORD',
 }
 
 export type CreateWalletState = {
   currentStage: CreateWalletStage
-  mnemonic?: string
   setCurrentStage: (stage: CreateWalletStage) => void
-  setMnemonic: (mnemonic: string) => void
+
+  option?: CreateWalletOption
+  startFlow: (option: CreateWalletOption) => void
+
+  mnemonic?: string
+  submitMnemonic: (mnemonic: string) => void
+
   reset: () => void
 }
 
 export const useCreateWalletStore = create<CreateWalletState>((set) => ({
-  currentStage: CreateWalletStage.MNEMONIC,
-  mnemonic: undefined,
-  password: undefined,
+  currentStage: CreateWalletStage.CHOOSE_OPTION,
   setCurrentStage: (currentStage) => set({currentStage}),
-  setMnemonic: (mnemonic) => set({mnemonic}),
+
+  option: undefined,
+  startFlow: (option) =>
+    set({
+      option,
+      mnemonic: undefined,
+      currentStage: CreateWalletStage.MNEMONIC,
+    }),
+
+  mnemonic: undefined,
+  submitMnemonic: (mnemonic) =>
+    set({mnemonic, currentStage: CreateWalletStage.PASSWORD}),
+
   reset: () =>
     set({
-      currentStage: CreateWalletStage.MNEMONIC,
+      currentStage: CreateWalletStage.CHOOSE_OPTION,
+      option: undefined,
       mnemonic: undefined,
     }),
 }))
