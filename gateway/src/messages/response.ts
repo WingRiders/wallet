@@ -1,8 +1,11 @@
 import type {Account} from '@wingriders/cab/account'
 import type {JsCryptoProvider} from '@wingriders/cab/crypto'
-import type {
-  CborHexString,
-  Address as HexAddress,
+import {
+  APIErrorCode,
+  type CborHexString,
+  DataSignErrorCode,
+  type Address as HexAddress,
+  TxSignErrorCode,
 } from '@wingriders/cab/dappConnector'
 import {cborizeTxWitnesses} from '@wingriders/cab/ledger/transaction'
 import type {NetworkName, TxInputRef} from '@wingriders/cab/types'
@@ -30,6 +33,14 @@ export const getResponseMessageType = (requestType: MessageType) => {
         `Request type ${requestType} does not have a response type`,
       )
   }
+}
+
+export const getDeclinedErrorCode = (messageType: MessageType) => {
+  if (messageType === MessageType.SIGN_TX_REQUEST)
+    return TxSignErrorCode.UserDeclined
+  if (messageType === MessageType.SIGN_DATA_REQUEST)
+    return DataSignErrorCode.UserDeclined
+  return APIErrorCode.Refused
 }
 
 export const getInitResponseMessage = (
