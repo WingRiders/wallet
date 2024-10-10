@@ -1,2 +1,5 @@
-export {InitDappPluginOptions, initDappPlugin} from './init/init'
-export {WalletInitMode} from './init/types'
+export {
+  InitWrWalletDappPluginOptions,
+  initWrWalletDappPlugin,
+} from './init/init'
+export {WrWalletInitMode} from './init/types'
