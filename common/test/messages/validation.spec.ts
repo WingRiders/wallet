@@ -127,6 +127,17 @@ describe('Validation', () => {
         },
       },
     }
+    const validWithError = {
+      type: MessageType.SIGN_DATA_RESPONSE,
+      initId: '0',
+      result: {
+        isSuccess: false,
+        error: {
+          code: 0,
+          message: 'error',
+        },
+      },
+    }
     const invalid1 = {
       type: MessageType.SIGN_DATA_RESPONSE,
       initId: '0',
@@ -145,6 +156,7 @@ describe('Validation', () => {
     }
 
     expect(isValidMessage(valid)).toBe(true)
+    expect(isValidMessage(validWithError)).toBe(true)
     expect(isValidMessage(invalid1)).toBe(false)
     expect(isValidMessage(invalid2)).toBe(false)
   })
