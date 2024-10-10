@@ -75,7 +75,7 @@ export const Header = ({showWalletActions = true}: HeaderProps) => {
                 }}
                 variant="outlined"
               >
-                Login out
+                Log out
               </Button>
             </Stack>
           )}
