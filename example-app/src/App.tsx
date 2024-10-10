@@ -141,12 +141,12 @@ export const App = () => {
         message: `Example transaction created: ${txHash}`,
       })
     } catch (e: any) {
-      const message = e.message
+      const message = e.info
       setExampleTxResult({
         isSuccess: false,
         message:
           message && typeof message === 'string'
-            ? `Transaction failed: ${e.message}`
+            ? `Transaction failed: ${message}`
             : 'Transaction failed',
       })
     }
@@ -169,12 +169,12 @@ export const App = () => {
         message: `Example data signed: ${JSON.stringify(signature)}`,
       })
     } catch (e: any) {
-      const message = e.message
+      const message = e.info
       setSignExampleDataResult({
         isSuccess: false,
         message:
           message && typeof message === 'string'
-            ? `Failed to sign data: ${e.message}`
+            ? `Failed to sign data: ${message}`
             : 'Failed to sign data',
       })
     }
