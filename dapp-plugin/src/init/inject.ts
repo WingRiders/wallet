@@ -154,3 +154,7 @@ const createCborApi = async (args: CreateCborApiOptions): Promise<CborAPI> => {
   }
   return cborApi
 }
+
+export const disconnectWrWallet = () => {
+  cachedCborApi = null
+}

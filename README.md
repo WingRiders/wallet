@@ -37,7 +37,7 @@ const connectWingRidersWallet = () => {
 };
 ```
 
-1. Use the injected wallet API:
+3. Use the injected wallet API:
 
 After injecting the wallet API, you can use it just as any another Cardano wallet according to the [CIP-30](https://cips.cardano.org/cip/CIP-30) standard:
 
@@ -62,6 +62,19 @@ const signature = await api.signTx(tx);
 
 // submit a transaction
 const submittedTx = await api.submitTx(signedTx);
+```
+
+4.  Disconnect the WingRiders wallet
+
+After user disconnects the wallet on your side, you should call `disconnectWrWallet()` to properly clear all data and disconnect the WingRiders wallet:
+
+```ts
+import { disconnectWrWallet } from "@wingriders/wallet-dapp-plugin";
+
+const onWalletDisconnect = () => {
+  // ... your logic for disconnecting wallet
+  disconnectWrWallet();
+};
 ```
 
 ## Development
