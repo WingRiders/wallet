@@ -3,7 +3,7 @@ import type {
   CborHexString,
   HexString,
 } from '@wingriders/cab/dappConnector'
-import type {NetworkName, UTxO} from '@wingriders/cab/types'
+import type {NetworkName, TxInputRef} from '@wingriders/cab/types'
 
 export type InitWalletGatewayResponse = {
   network: NetworkName
@@ -11,7 +11,7 @@ export type InitWalletGatewayResponse = {
   unusedAddresses: Address[]
   changeAddress: Address
   rewardAddresses: Address[]
-  collateralUtxos: UTxO[]
+  collateralUtxoRef: TxInputRef | null
 }
 
 /**

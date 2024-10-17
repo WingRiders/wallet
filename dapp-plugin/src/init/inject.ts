@@ -65,7 +65,7 @@ const createCborApi = async ({
     unusedAddresses,
     changeAddress,
     rewardAddresses,
-    collateralUtxos,
+    collateralUtxoRef,
   } = await gateway.init()
 
   const dataApi = getDataApi(network)
@@ -115,7 +115,15 @@ const createCborApi = async ({
       return dataApi.submitTx(tx)
     },
     async getCollateral(_params) {
-      return collateralUtxos.map(utxoToWalletCbor)
+      if (!collateralUtxoRef) return null
+      const utxos = await getUtxos()
+      return utxos
+        .filter(
+          (utxo) =>
+            utxo.txHash === collateralUtxoRef.txHash &&
+            utxo.outputIndex === collateralUtxoRef.outputIndex,
+        )
+        .map(utxoToWalletCbor)
     },
   }
   return cborApi
