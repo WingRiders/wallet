@@ -22,7 +22,10 @@ import {
   reverseUtxos,
   reverseValue,
 } from '@wingriders/cab/wallet/connector'
-import {WalletInitMode, initDappPlugin} from '@wingriders/wallet-dapp-plugin'
+import {
+  WrWalletInitMode,
+  initWrWalletDappPlugin,
+} from '@wingriders/wallet-dapp-plugin'
 import {useState} from 'react'
 import {Section} from './components/Section'
 import {config} from './config'
@@ -61,9 +64,9 @@ export const App = () => {
   const handleConnectWallet = async () => {
     try {
       setIsLoadingConnect(true)
-      initDappPlugin({
+      initWrWalletDappPlugin({
         gatewayUrl: config.GATEWAY_URL,
-        mode: WalletInitMode.MULTI_NETWORK,
+        mode: WrWalletInitMode.MULTI_NETWORK,
         cabServerUrlByNetwork: {
           preprod: config.CAB_SERVER_URL_PREPROD,
           mainnet: config.CAB_SERVER_URL_MAINNET,

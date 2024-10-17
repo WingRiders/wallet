@@ -13,7 +13,7 @@ import {
   txValueToWalletCbor,
   utxoToWalletCbor,
 } from '../helpers/converters'
-import {WalletInitMode} from './types'
+import {WrWalletInitMode} from './types'
 
 declare const window: typeof globalThis.window & {
   cardano?: {
@@ -31,12 +31,12 @@ type InjectCborApiOptions = {
   icon: string
 } & (
   | {
-      mode: WalletInitMode.SINGLE_NETWORK
+      mode: WrWalletInitMode.SINGLE_NETWORK
       network: NetworkName
       dataApi: IDataApi
     }
   | {
-      mode: WalletInitMode.MULTI_NETWORK
+      mode: WrWalletInitMode.MULTI_NETWORK
       getDataApi: (network: NetworkName) => IDataApi
     }
 )
@@ -63,12 +63,12 @@ type CreateCborApiOptions = {
   gateway: IWalletGateway
 } & (
   | {
-      mode: WalletInitMode.SINGLE_NETWORK
+      mode: WrWalletInitMode.SINGLE_NETWORK
       network: NetworkName
       dataApi: IDataApi
     }
   | {
-      mode: WalletInitMode.MULTI_NETWORK
+      mode: WrWalletInitMode.MULTI_NETWORK
       getDataApi: (network: NetworkName) => IDataApi
     }
 )
@@ -86,7 +86,7 @@ const createCborApi = async (args: CreateCborApiOptions): Promise<CborAPI> => {
   } = await gateway.init()
 
   const dataApi = (() => {
-    if (args.mode === WalletInitMode.SINGLE_NETWORK) {
+    if (args.mode === WrWalletInitMode.SINGLE_NETWORK) {
       if (args.network !== network)
         throw new Error(
           `Network mismatch: wallet is on ${network} but expected ${args.network}`,

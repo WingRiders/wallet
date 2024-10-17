@@ -2,16 +2,16 @@ import type {NetworkName} from '@wingriders/cab/types'
 import {DataApi} from '../dataApi/DataApi'
 import {WalletGateway} from '../gateway/WalletGateway'
 import {injectCborApi} from './inject'
-import {WalletInitMode} from './types'
+import {WrWalletInitMode} from './types'
 
-export type InitDappPluginOptions = {
+export type InitWrWalletDappPluginOptions = {
   /**
    * URL to the wallet gateway application.
    */
   gatewayUrl: string
 } & (
   | {
-      mode: WalletInitMode.SINGLE_NETWORK
+      mode: WrWalletInitMode.SINGLE_NETWORK
       network: NetworkName
       /**
        * URL to the CAB backend server for the selected network.
@@ -19,7 +19,7 @@ export type InitDappPluginOptions = {
       cabServerUrl: string
     }
   | {
-      mode: WalletInitMode.MULTI_NETWORK
+      mode: WrWalletInitMode.MULTI_NETWORK
       /**
        * URL to the CAB backend server for each network.
        */
@@ -27,15 +27,17 @@ export type InitDappPluginOptions = {
     }
 )
 
-export const initDappPlugin = (options: InitDappPluginOptions) => {
+export const initWrWalletDappPlugin = (
+  options: InitWrWalletDappPluginOptions,
+) => {
   injectCborApi({
     name: 'WingRiders',
     apiVersion: '0.0.1',
     icon: 'TODO',
     gateway: new WalletGateway({url: options.gatewayUrl}),
-    ...(options.mode === WalletInitMode.SINGLE_NETWORK
+    ...(options.mode === WrWalletInitMode.SINGLE_NETWORK
       ? {
-          mode: WalletInitMode.SINGLE_NETWORK,
+          mode: WrWalletInitMode.SINGLE_NETWORK,
           network: options.network,
           dataApi: new DataApi({
             cabServerUrl: options.cabServerUrl,
@@ -43,7 +45,7 @@ export const initDappPlugin = (options: InitDappPluginOptions) => {
           }),
         }
       : {
-          mode: WalletInitMode.MULTI_NETWORK,
+          mode: WrWalletInitMode.MULTI_NETWORK,
           getDataApi: (network) =>
             new DataApi({
               cabServerUrl: options.cabServerUrlByNetwork[network],
