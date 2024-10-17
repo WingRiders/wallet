@@ -10,6 +10,7 @@ import '@fontsource/roboto/700.css'
 import {ApolloProvider} from '@apollo/client'
 import {CssBaseline, ThemeProvider} from '@mui/material'
 import {client} from './graphql/client'
+import {MessageListener} from './messages/MessageListener'
 import {useCreatedWalletStore} from './store/createdWallet'
 import {useWalletDataStore} from './store/walletData'
 import {theme} from './theme'
@@ -47,7 +48,9 @@ if (!rootElement.innerHTML) {
       <ThemeProvider theme={theme}>
         <ApolloProvider client={client}>
           <CssBaseline />
-          <RouterWithContext />
+          <MessageListener>
+            <RouterWithContext />
+          </MessageListener>
         </ApolloProvider>
       </ThemeProvider>
     </StrictMode>,
