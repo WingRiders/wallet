@@ -4,7 +4,7 @@ This guide shows how to run the wallet gateway locally and verify that it works.
 
 ## Prerequisites
 
-- Bun is install on your machine (https://bun.sh/)
+- Bun is installed on your machine (https://bun.sh/)
 - Git is installed on your machine (https://git-scm.com/)
 
 ## Steps

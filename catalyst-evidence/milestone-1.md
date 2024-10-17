@@ -4,7 +4,7 @@ This guide shows how to verify that the implemented wallet API returns mocked da
 
 ## Prerequisites
 
-- Bun is install on your machine (https://bun.sh/)
+- Bun is installed on your machine (https://bun.sh/)
 - Git is installed on your machine (https://git-scm.com/)
 
 ## Steps
