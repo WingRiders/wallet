@@ -13,6 +13,7 @@ import {
   txValueToWalletCbor,
   utxoToWalletCbor,
 } from '../helpers/converters'
+import {WalletInitMode} from './types'
 
 declare const window: typeof globalThis.window & {
   cardano?: {
@@ -25,21 +26,26 @@ let cachedCborApi: CborAPI | null = null
 
 type InjectCborApiOptions = {
   gateway: IWalletGateway
-  getDataApi: (network: NetworkName) => IDataApi
   name: string
   apiVersion: string
   icon: string
-}
+} & (
+  | {
+      mode: WalletInitMode.SINGLE_NETWORK
+      network: NetworkName
+      dataApi: IDataApi
+    }
+  | {
+      mode: WalletInitMode.MULTI_NETWORK
+      getDataApi: (network: NetworkName) => IDataApi
+    }
+)
 
-export const injectCborApi = ({
-  gateway,
-  getDataApi,
-  name,
-  apiVersion,
-  icon,
-}: InjectCborApiOptions) => {
+export const injectCborApi = (args: InjectCborApiOptions) => {
   if (!window) throw new Error('No window object found')
   if (!window.cardano) window.cardano = {}
+
+  const {name, apiVersion, icon} = args
 
   window.cardano.wrWallet = {
     name,
@@ -47,7 +53,7 @@ export const injectCborApi = ({
     icon,
     isEnabled: async () => cachedCborApi != null,
     enable: async () => {
-      cachedCborApi ??= await createCborApi({gateway, getDataApi})
+      cachedCborApi ??= await createCborApi(args)
       return cachedCborApi
     },
   }
@@ -55,13 +61,21 @@ export const injectCborApi = ({
 
 type CreateCborApiOptions = {
   gateway: IWalletGateway
-  getDataApi: (network: NetworkName) => IDataApi
-}
+} & (
+  | {
+      mode: WalletInitMode.SINGLE_NETWORK
+      network: NetworkName
+      dataApi: IDataApi
+    }
+  | {
+      mode: WalletInitMode.MULTI_NETWORK
+      getDataApi: (network: NetworkName) => IDataApi
+    }
+)
 
-const createCborApi = async ({
-  gateway,
-  getDataApi,
-}: CreateCborApiOptions): Promise<CborAPI> => {
+const createCborApi = async (args: CreateCborApiOptions): Promise<CborAPI> => {
+  const {gateway} = args
+
   const {
     network,
     usedAddresses,
@@ -71,7 +85,16 @@ const createCborApi = async ({
     collateralUtxoRef,
   } = await gateway.init()
 
-  const dataApi = getDataApi(network)
+  const dataApi = (() => {
+    if (args.mode === WalletInitMode.SINGLE_NETWORK) {
+      if (args.network !== network)
+        throw new Error(
+          `Network mismatch: wallet is on ${network} but expected ${args.network}`,
+        )
+      return args.dataApi
+    }
+    return args.getDataApi(network)
+  })()
   const networkId = NETWORK_NAME_TO_API_NETWORK_ID[network]
   const usedBechAddresses = usedAddresses.map(hexAddressToBechAddress(network))
   const getUtxos = () => dataApi.getUtxos(usedBechAddresses)

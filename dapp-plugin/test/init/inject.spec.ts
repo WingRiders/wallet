@@ -4,7 +4,9 @@ import {CborToJsApiBridge, reverseUtxos} from '@wingriders/cab/wallet/connector'
 
 import {injectCborApi} from '../../src/init/inject'
 
+import {NetworkName} from '@wingriders/cab/types'
 import {NETWORK_NAME_TO_API_NETWORK_ID} from '../../src/constants'
+import {WalletInitMode} from '../../src/init/types'
 import {MOCKED_DATA_API, MOCKED_WALLET_GATEWAY} from '../mocks/apis'
 import {
   MOCKED_CHANGE_ADDRESS,
@@ -30,8 +32,10 @@ declare const window: typeof globalThis.window & {
 describe('inject', () => {
   test('injected CBOR API returns correct data', async () => {
     injectCborApi({
+      mode: WalletInitMode.SINGLE_NETWORK,
+      network: NetworkName.PREPROD,
+      dataApi: MOCKED_DATA_API,
       gateway: MOCKED_WALLET_GATEWAY,
-      getDataApi: () => MOCKED_DATA_API,
       name: MOCKED_WALLET_NAME,
       apiVersion: MOCKED_WALLET_VERSION,
       icon: MOCKED_WALLET_ICON,
