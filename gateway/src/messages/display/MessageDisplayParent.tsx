@@ -8,6 +8,7 @@ type MessageDisplayParentProps = Pick<
 > & {
   title: string
   allowText?: string
+  disabled?: boolean
   children?: React.ReactNode
 }
 
@@ -17,6 +18,7 @@ export const MessageDisplayParent = ({
   isLoading,
   title,
   allowText,
+  disabled,
   children,
 }: MessageDisplayParentProps) => {
   return (
@@ -37,11 +39,12 @@ export const MessageDisplayParent = ({
           variant="contained"
           sx={{mt: 2}}
           loading={isLoading}
+          disabled={disabled}
           fullWidth
         >
           {allowText ?? 'Allow'}
         </LoadingButton>
-        <Button onClick={onReject} disabled={isLoading} fullWidth>
+        <Button onClick={onReject} disabled={isLoading || disabled} fullWidth>
           Reject
         </Button>
       </Stack>

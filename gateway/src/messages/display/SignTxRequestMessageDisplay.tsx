@@ -133,6 +133,7 @@ export const SignTxRequestMessageDisplay = ({
       onAllow={onAllow}
       onReject={onReject}
       isLoading={isLoading}
+      disabled={isLoadingData}
       title="Sign transaction request"
       allowText="Sign"
     >
