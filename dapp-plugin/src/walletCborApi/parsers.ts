@@ -16,7 +16,7 @@ import {
   DecodedUtxoOutputTag,
 } from './types'
 
-export const utxoToDecodeUtxo = (utxo: UTxO): DecodedUtxo => {
+export const utxoToDecodedUtxo = (utxo: UTxO): DecodedUtxo => {
   const decodedValue = valueToDecodedValue(utxo.coins, utxo.tokenBundle)
 
   const output: DecodedUtxo[1] = new Map()
