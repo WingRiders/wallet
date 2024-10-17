@@ -9,8 +9,8 @@
     "build": "rollup -c",
     "check": "bun biome check src",
     "fix": "bun run check --write",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "bun test",
+    "test:watch": "bun test --watch"
   },
   "dependencies": {
     "@wingriders/cab": "^2.0.28",
@@ -18,16 +18,15 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.1",
+    "@happy-dom/global-registrator": "^15.7.4",
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",
-    "happy-dom": "^15.7.4",
     "rollup": "^4.21.3",
     "rollup-plugin-dts": "^6.1.1",
     "tslib": "^2.7.0",
     "type-fest": "^4.26.1",
-    "typescript": "^5.6.2",
-    "vitest": "^2.1.1"
+    "typescript": "^5.6.2"
   }
 }
