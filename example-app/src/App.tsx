@@ -24,6 +24,7 @@ import {
 } from '@wingriders/cab/wallet/connector'
 import {
   WrWalletInitMode,
+  disconnectWrWallet,
   initWrWalletDappPlugin,
 } from '@wingriders/wallet-dapp-plugin'
 import {useState} from 'react'
@@ -96,6 +97,7 @@ export const App = () => {
 
   const handleDisconnectWallet = () => {
     setWalletData(null)
+    disconnectWrWallet()
   }
 
   const handleCreateExampleTransaction = async () => {
