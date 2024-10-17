@@ -16,6 +16,19 @@
         "noNonNullAssertion": {
           "level": "off"
         }
+      },
+      "correctness": {
+        "noUnusedVariables": {
+          "level": "warn"
+        },
+        "noUnusedImports": {
+          "level": "warn"
+        }
+      },
+      "suspicious": {
+        "noExplicitAny": {
+          "level": "off"
+        }
       }
     }
   },
