@@ -1,6 +1,6 @@
 {
   "name": "@wingriders/wallet-dapp-plugin",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Plugin for dApps that want to integrate WingRiders Wallet",
   "repository": {
     "type": "git",
