@@ -19,6 +19,7 @@ import {
 } from '@wingriders/cab/wallet/connector'
 import {initDappPlugin} from '@wingriders/wallet-dapp-plugin'
 import {useState} from 'react'
+import {config} from './config'
 import {buildTx, signTx} from './helpers/actions'
 import {getWalletOwner} from './helpers/wallet'
 import {getCachedProtocolParameters} from './protocolParameters/protocolParameters'
@@ -43,10 +44,10 @@ export const App = () => {
     try {
       setIsLoadingConnect(true)
       initDappPlugin({
-        gatewayUrl: 'http://localhost:5173',
+        gatewayUrl: config.GATEWAY_URL,
         cabBackendUrlByNetwork: {
-          preprod: 'http://127.0.0.1:3000',
-          mainnet: 'http://127.0.0.1:3000',
+          preprod: config.CAB_SERVER_URL_PREPROD,
+          mainnet: config.CAB_SERVER_URL_MAINNET,
         },
       })
       const wrWallet = window.cardano?.wrWallet
