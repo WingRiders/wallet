@@ -20,11 +20,14 @@ npm install @wingriders/wallet-dapp-plugin
 2. Initialize the plugin:
 
 ```ts
-import { initDappPlugin, WalletInitMode } from "@wingriders/wallet-dapp-plugin";
+import {
+  initWrWalletDappPlugin,
+  WrWalletInitMode,
+} from "@wingriders/wallet-dapp-plugin";
 
 const connectWingRidersWallet = () => {
-  initDappPlugin({
-    mode: WalletInitMode.SINGLE_NETWORK,
+  initWrWalletDappPlugin({
+    mode: WrWalletInitMode.SINGLE_NETWORK,
     network: "preprod",
     cabServerUrl: "https://cab-server.preprod.wingriders.com",
     gatewayUrl: "https://wallet.wingriders.com",
