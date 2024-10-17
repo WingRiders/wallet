@@ -8,7 +8,9 @@
   "scripts": {
     "build": "rollup -c",
     "check": "bun biome check src",
-    "fix": "bun run check --write"
+    "fix": "bun run check --write",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@wingriders/cab": "^2.0.28",
@@ -20,9 +22,11 @@
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",
+    "happy-dom": "^15.7.4",
     "rollup": "^4.21.3",
     "rollup-plugin-dts": "^6.1.1",
     "tslib": "^2.7.0",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.2",
+    "vitest": "^2.1.1"
   }
 }
