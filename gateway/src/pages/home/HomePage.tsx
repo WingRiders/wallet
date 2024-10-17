@@ -39,7 +39,7 @@ export const HomePage = () => {
 
           <Section title="Address">
             <Typography variant="body1">
-              {walletData.usedAddresses[0]}
+              {walletData.usedAddresses[0] ?? walletData.unusedAddresses[0]}
             </Typography>
           </Section>
 
