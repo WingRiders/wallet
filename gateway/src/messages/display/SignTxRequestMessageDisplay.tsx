@@ -164,16 +164,16 @@ export const SignTxRequestMessageDisplay = ({
               </Typography>
 
               <Stack>
-                <Typography variant="body1">
-                  {userDiffValue.tokens.map((token) => (
-                    <DiffDisplay key={assetId(token)} diff={token.quantity}>
+                {userDiffValue.tokens.map((token) => (
+                  <Typography key={assetId(token)} variant="body1">
+                    <DiffDisplay diff={token.quantity}>
                       <AssetQuantityDisplay
                         token={token}
                         options={{showSignIfPositive: true}}
                       />
                     </DiffDisplay>
-                  ))}
-                </Typography>
+                  </Typography>
+                ))}
               </Stack>
             </>
           ) : (
