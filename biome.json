@@ -41,6 +41,11 @@
             "allow": ["warn", "error"]
           }
         }
+      },
+      "complexity": {
+        "noForEach": {
+          "level": "off"
+        }
       }
     }
   },
