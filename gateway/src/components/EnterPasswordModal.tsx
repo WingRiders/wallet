@@ -8,6 +8,7 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material'
+import type {JsCryptoProvider} from '@wingriders/cab/crypto'
 import type {Wallet} from '@wingriders/cab/wallet'
 import {useEffect} from 'react'
 import {type SubmitHandler, useForm} from 'react-hook-form'
@@ -20,7 +21,7 @@ import {useCreatedWalletStore} from '../store/createdWallet'
 type EnterPasswordModalProps = {
   open: boolean
   onClose: () => void
-  onLogin: (wallet: Wallet) => void
+  onLogin: (wallet: Wallet, cryptoProvider: JsCryptoProvider) => void
 }
 
 type Inputs = {
@@ -68,11 +69,11 @@ export const EnterPasswordModal = ({
     }
 
     try {
-      const {wallet} = await initWallet({
+      const {wallet, cryptoProvider} = await initWallet({
         mnemonic,
         network,
       })
-      onLogin(wallet)
+      onLogin(wallet, cryptoProvider)
       onClose()
     } catch (e: any) {
       const message = e.message
