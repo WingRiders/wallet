@@ -1,14 +1,10 @@
 {
-  "name": "@wingriders/wallet-dapp-plugin",
-  "main": "dist/index.js",
-  "module": "dist/index.esm.js",
-  "types": "dist/index.d.ts",
+  "name": "@wingriders/wallet-common",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "type": "module",
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "build": "bun --filter='@wingriders/wallet-common' run build && rollup -c",
+    "build": "bun run tsc",
     "check": "bun biome check src",
     "fix": "bun run check --write",
     "test": "bun test",
@@ -16,20 +12,20 @@
   },
   "dependencies": {
     "@wingriders/cab": "^2.0.28",
-    "@wingriders/wallet-common": "workspace:*",
-    "borc": "^3.0.0"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.1",
-    "@happy-dom/global-registrator": "^15.7.4",
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",
+    "happy-dom": "^15.7.4",
     "rollup": "^4.21.3",
     "rollup-plugin-dts": "^6.1.1",
     "tslib": "^2.7.0",
     "type-fest": "^4.26.1",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.2",
+    "vitest": "^2.1.1"
   }
 }
