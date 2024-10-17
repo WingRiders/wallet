@@ -8,8 +8,9 @@ import type {JsAPI} from '@wingriders/cab/dappConnector'
 import type {NetworkName} from '@wingriders/cab/types'
 import {Wallet} from '@wingriders/cab/wallet'
 import {CabBackendExplorer} from '@wingriders/wallet-common'
+import type {SetNonNullable} from 'type-fest'
 import {cabServerUrlByNetwork} from '../config'
-import type {WalletData} from '../store/walletData'
+import type {WalletDataState} from '../store/walletData'
 
 type InitWalletProps = {
   mnemonic: string
@@ -42,7 +43,9 @@ export const initWallet = async ({mnemonic, network}: InitWalletProps) => {
   return {wallet, account, cryptoProvider}
 }
 
-export const getWalletData = (account: Account): WalletData => {
+export const getWalletData = (
+  account: Account,
+): SetNonNullable<Pick<WalletDataState, 'addresses' | 'utxos'>> => {
   const accountInfo = account.getAccountInfo()
   const usedAddresses = accountInfo.usedAddresses.map((a) => a.address)
   const unusedAddresses = accountInfo.unusedAddresses.map((a) => a.address)
@@ -51,10 +54,12 @@ export const getWalletData = (account: Account): WalletData => {
   const utxos = account.getUtxos()
 
   return {
-    usedAddresses,
-    unusedAddresses,
-    changeAddress,
-    rewardAddresses,
+    addresses: {
+      usedAddresses,
+      unusedAddresses,
+      changeAddress,
+      rewardAddresses,
+    },
     utxos,
   }
 }

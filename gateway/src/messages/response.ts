@@ -38,7 +38,9 @@ export const getInitResponseMessage = (
   network: NetworkName,
   collateralUtxoRef: TxInputRef | null,
 ) => {
-  const walletData = getWalletData(account)
+  const {
+    addresses: {usedAddresses, unusedAddresses, changeAddress, rewardAddresses},
+  } = getWalletData(account)
 
   const responseMessage: ConcreteMessage<'INIT_RESPONSE'> = {
     type: MessageType.INIT_RESPONSE,
@@ -47,10 +49,10 @@ export const getInitResponseMessage = (
       isSuccess: true,
       data: {
         network,
-        usedAddresses: walletData.usedAddresses.map(normalizeAddress),
-        unusedAddresses: walletData.unusedAddresses.map(normalizeAddress),
-        changeAddress: normalizeAddress(walletData.changeAddress),
-        rewardAddresses: walletData.rewardAddresses.map(normalizeAddress),
+        usedAddresses: usedAddresses.map(normalizeAddress),
+        unusedAddresses: unusedAddresses.map(normalizeAddress),
+        changeAddress: normalizeAddress(changeAddress),
+        rewardAddresses: rewardAddresses.map(normalizeAddress),
         collateralUtxoRef,
       },
     },
