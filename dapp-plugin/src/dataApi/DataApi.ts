@@ -8,16 +8,16 @@ import {CabBackendExplorer} from '@wingriders/wallet-common'
 import type {IDataApi} from './types'
 
 type DataApiOptions = {
-  cabBackendUrl: string
+  cabServerUrl: string
   network: NetworkName
 }
 
 export class DataApi implements IDataApi {
   private cabBackendExplorer: CabBackendExplorer
 
-  constructor({cabBackendUrl, network}: DataApiOptions) {
+  constructor({cabServerUrl, network}: DataApiOptions) {
     this.cabBackendExplorer = new CabBackendExplorer({
-      url: cabBackendUrl,
+      cabServerUrl,
       network,
     })
   }
