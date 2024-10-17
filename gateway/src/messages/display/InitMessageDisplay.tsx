@@ -1,5 +1,5 @@
-import {LoadingButton} from '@mui/lab'
-import {Button, Stack, Typography} from '@mui/material'
+import {Link, Typography} from '@mui/material'
+import {MessageDisplayParent} from './MessageDisplayParent'
 import type {ConcreteMessageDisplayProps} from './types'
 
 export const InitMessageDisplay = ({
@@ -9,22 +9,19 @@ export const InitMessageDisplay = ({
   onReject,
 }: ConcreteMessageDisplayProps<'INIT_REQUEST'>) => {
   return (
-    <Stack>
-      <Typography variant="h4">Connection request</Typography>
+    <MessageDisplayParent
+      onAllow={onAllow}
+      onReject={onReject}
+      isLoading={isLoading}
+      title="Connection request"
+      allowText="Connect"
+    >
       <Typography>
-        {item.origin} is requesting to connect to your wallet
+        <Link href={item.origin} target="_blank">
+          {item.origin}
+        </Link>{' '}
+        is requesting to connect to your wallet.
       </Typography>
-      <LoadingButton
-        onClick={onAllow}
-        variant="contained"
-        sx={{mt: 2}}
-        loading={isLoading}
-      >
-        Connect
-      </LoadingButton>
-      <Button onClick={onReject} disabled={isLoading}>
-        Reject
-      </Button>
-    </Stack>
+    </MessageDisplayParent>
   )
 }

@@ -1,5 +1,5 @@
-import {LoadingButton} from '@mui/lab'
-import {Button, Stack, Typography} from '@mui/material'
+import {Box, Link, Typography} from '@mui/material'
+import {MessageDisplayParent} from './MessageDisplayParent'
 import type {ConcreteMessageDisplayProps} from './types'
 
 export const SignDataRequestMessageDisplay = ({
@@ -9,23 +9,25 @@ export const SignDataRequestMessageDisplay = ({
   onReject,
 }: ConcreteMessageDisplayProps<'SIGN_DATA_REQUEST'>) => {
   return (
-    <Stack>
-      <Typography variant="h4">Sign data request</Typography>
-      <Typography>{item.origin} is requesting to sign data</Typography>
-      <Typography variant="body2" sx={{overflowWrap: 'break-word'}}>
-        {Buffer.from(item.message.payload.payload, 'hex').toString('utf8')}
+    <MessageDisplayParent
+      onAllow={onAllow}
+      onReject={onReject}
+      isLoading={isLoading}
+      title="Sign data request"
+      allowText="Sign"
+    >
+      <Typography>
+        <Link href={item.origin} target="_blank">
+          {item.origin}
+        </Link>{' '}
+        is requesting to sign data.
       </Typography>
-      <LoadingButton
-        onClick={onAllow}
-        variant="contained"
-        sx={{mt: 2}}
-        loading={isLoading}
-      >
-        Sign
-      </LoadingButton>
-      <Button onClick={onReject} disabled={isLoading}>
-        Reject
-      </Button>
-    </Stack>
+
+      <Box bgcolor={({palette}) => palette.background.paper} p={2} mt={2}>
+        <Typography variant="body2" sx={{overflowWrap: 'break-word'}}>
+          {Buffer.from(item.message.payload.payload, 'hex').toString('utf8')}
+        </Typography>
+      </Box>
+    </MessageDisplayParent>
   )
 }

@@ -9,6 +9,7 @@ import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
 import {ApolloProvider} from '@apollo/client'
 import {CssBaseline, ThemeProvider} from '@mui/material'
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import {AppBackground} from './components/AppBackground'
 import {client} from './graphql/client'
 import {MessageListener} from './messages/MessageListener'
@@ -41,6 +42,16 @@ const RouterWithContext = () => {
     />
   )
 }
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Number.POSITIVE_INFINITY,
+      refetchOnWindowFocus: false,
+    },
+  },
+})
+
 const rootElement = document.getElementById('root')!
 if (!rootElement.innerHTML) {
   const root = createRoot(rootElement)
@@ -48,11 +59,13 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <ThemeProvider theme={theme}>
         <ApolloProvider client={client}>
-          <CssBaseline />
-          <MessageListener>
-            <AppBackground />
-            <RouterWithContext />
-          </MessageListener>
+          <QueryClientProvider client={queryClient}>
+            <CssBaseline />
+            <MessageListener>
+              <AppBackground />
+              <RouterWithContext />
+            </MessageListener>
+          </QueryClientProvider>
         </ApolloProvider>
       </ThemeProvider>
     </StrictMode>,
