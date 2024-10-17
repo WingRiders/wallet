@@ -35,6 +35,33 @@ const connectWingRidersWallet = () => {
 };
 ```
 
+3. Use the injected wallet API:
+
+After injecting the wallet API, you can use it just as any another Cardano wallet according to the [CIP-30](https://cips.cardano.org/cip/CIP-30) standard:
+
+```ts
+// get the CBOR API by calling .enable()
+const api = await window.cardano.wrWallet.enable();
+
+// get list of utxos
+const utxos = await api.getUtxos();
+
+// get balance - ADA and tokens
+const balance = await api.getBalance();
+
+// get list of used addresses
+const usedAddresses = await api.getUsedAddresses();
+
+// get collateral
+const collateral = await api.getCollateral();
+
+// sign a transaction
+const signature = await api.signTx(tx);
+
+// submit a transaction
+const submittedTx = await api.submitTx(signedTx);
+```
+
 ## Development
 
 This project uses bun, if you don't have it installed at your machine, you can install it by following the instructions at https://bun.sh/.
