@@ -1,4 +1,5 @@
 import type {JsCryptoProvider} from '@wingriders/cab/crypto'
+import {APIErrorCode} from '@wingriders/cab/dappConnector'
 import {networkIdToNetworkName} from '@wingriders/cab/helpers'
 import type {Wallet} from '@wingriders/cab/wallet'
 import {
@@ -14,6 +15,7 @@ import {useMessagesStore} from '../store/messages'
 import {useWalletDataStore} from '../store/walletData'
 import {MessageDisplay} from './display/MessageDisplay'
 import {
+  getDeclinedErrorCode,
   getInitResponseMessage,
   getResponseMessageType,
   getSignDataResponseMessage,
@@ -69,21 +71,23 @@ export const MessageHandler = () => {
       })
     } catch (e: any) {
       const message = e.message
-      handleMessageFail(
-        message && typeof message === 'string'
-          ? `Request failed: ${e.message}`
-          : 'Request failed',
-      )
+      handleMessageFail({
+        code: APIErrorCode.InternalError,
+        info:
+          message && typeof message === 'string'
+            ? `Request failed: ${e.message}`
+            : 'Request failed',
+      })
     }
     setIsLoading(false)
     window.close()
   }
 
-  const handleMessageFail = (errorMessage?: string) => {
+  const handleMessageFail = (error?: {code?: number; info?: string}) => {
     const responseMessage: ConcreteMessage<typeof responseMessageType> = {
       type: responseMessageType,
       initId: pendingRequestMessage.message.initId,
-      result: {isSuccess: false, errorMessage},
+      result: {isSuccess: false, error},
     }
 
     pendingRequestMessage.eventSource.postMessage(responseMessage, {
@@ -98,7 +102,10 @@ export const MessageHandler = () => {
         isLoading={isLoading}
         onAllow={() => setShowPasswordModal(true)}
         onReject={() => {
-          handleMessageFail('User rejected the request')
+          handleMessageFail({
+            code: getDeclinedErrorCode(pendingRequestMessage.message.type),
+            info: 'User rejected the request',
+          })
           window.close()
         }}
       />
