@@ -28,11 +28,11 @@ import {
 import {
   CborInt64,
   CborizedTxDatum,
+  type CborizedTxScriptRef,
   TxBodyKey,
 } from '@wingriders/cab/ledger/transaction'
 import {BigNumber, NetworkId, type TxCertificate} from '@wingriders/cab/types'
 import {decode, encode} from 'borc'
-import type {CborizedTxScriptRef} from './CborizedTxScriptRef'
 import {
   type CborizedDatumOption,
   type CborizedTxBody,

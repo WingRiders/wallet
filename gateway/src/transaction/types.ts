@@ -1,11 +1,11 @@
 import type {
   CborInt64,
   CborizedTxDatum,
+  CborizedTxScriptRef,
   TxBodyKey,
 } from '@wingriders/cab/ledger/transaction'
 import type {NetworkId, TxRedeemerTag} from '@wingriders/cab/types'
 import type {Tagged} from 'borc'
-import type {CborizedTxScriptRef} from './CborizedTxScriptRef'
 
 export type CborizedTxInput = [Buffer, number]
 
