@@ -1,17 +1,25 @@
 import type {CborHexString, HexString} from '@wingriders/cab/dappConnector'
-import type {Address as BechAddress, UTxO} from '@wingriders/cab/types'
+import type {
+  Address as BechAddress,
+  NetworkName,
+  UTxO,
+} from '@wingriders/cab/types'
 import {CabBackendExplorer} from '@wingriders/wallet-common'
 import type {IDataApi} from './types'
 
 type DataApiOptions = {
   cabBackendUrl: string
+  network: NetworkName
 }
 
 export class DataApi implements IDataApi {
   private cabBackendExplorer: CabBackendExplorer
 
-  constructor({cabBackendUrl}: DataApiOptions) {
-    this.cabBackendExplorer = new CabBackendExplorer(cabBackendUrl)
+  constructor({cabBackendUrl, network}: DataApiOptions) {
+    this.cabBackendExplorer = new CabBackendExplorer({
+      url: cabBackendUrl,
+      network,
+    })
   }
 
   async getUtxos(addresses: BechAddress[]): Promise<UTxO[]> {
