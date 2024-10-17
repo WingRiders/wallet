@@ -11,7 +11,7 @@ export const CreateWalletPage = () => {
   const currentStage = useCreateWalletStore((s) => s.currentStage)
 
   return (
-    <Page>
+    <Page showHeader headerProps={{showWalletActions: false}}>
       <Typography variant="h3">Create wallet</Typography>
 
       <Box mt={4}>
