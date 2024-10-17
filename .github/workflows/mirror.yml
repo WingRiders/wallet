@@ -6,6 +6,12 @@ on:
         type: string
         required: true
 
+    secrets:
+      TECHRIDER_SSH_PUBLIC_KEY:
+        required: true
+      TECHRIDER_SSH_PRIVATE_KEY:
+        required: true
+
 jobs:
   mirror:
     name: Mirror commits to public repo
