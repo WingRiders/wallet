@@ -1,13 +1,11 @@
-import {cacheResults, makeNonNullable} from '@wingriders/cab/helpers'
-import {parseOgmiosProtocolParameters} from './parse'
+import {cacheResults} from '@wingriders/cab/helpers'
+import {CabBackendExplorer} from '@wingriders/wallet-common'
 
 const PROTOCOL_PARAMETERS_CACHE_TTL = 1000 * 60 * 60 // 1 hour
 
 const fetchProtocolParameters = async () => {
-  const res = await fetch('http://127.0.0.1:3000/protocolParameters').then(
-    (res) => res.json(),
-  )
-  return makeNonNullable(parseOgmiosProtocolParameters(res))
+  const cabBackendExplorer = new CabBackendExplorer('http://127.0.0.1:3000')
+  return cabBackendExplorer.getProtocolParameters()
 }
 
 export const getCachedProtocolParameters = cacheResults(

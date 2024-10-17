@@ -24,7 +24,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.1",
-    "@cardano-ogmios/schema": "^6.8.0",
     "@rollup/plugin-inject": "^5.0.5",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
