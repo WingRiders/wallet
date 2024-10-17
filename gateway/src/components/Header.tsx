@@ -27,8 +27,8 @@ export const Header = ({showWalletActions = true}: HeaderProps) => {
       setNetwork,
     })),
   )
-  const {setWalletData, clear: clearWalletData} = useWalletDataStore(
-    useShallow(({setWalletData, clear}) => ({setWalletData, clear})),
+  const {logOut, clear: clearWalletData} = useWalletDataStore(
+    useShallow(({logOut, clear}) => ({logOut, clear})),
   )
 
   return (
@@ -70,7 +70,7 @@ export const Header = ({showWalletActions = true}: HeaderProps) => {
               </Button>
               <Button
                 onClick={() => {
-                  setWalletData(null)
+                  logOut()
                   navigate({to: '/auth/login', replace: true})
                 }}
                 variant="outlined"
