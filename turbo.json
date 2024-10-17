@@ -10,6 +10,9 @@
     },
     "fix": {
       "dependsOn": ["^build"]
+    },
+    "test": {
+      "dependsOn": ["^build"]
     }
   }
 }
