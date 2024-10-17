@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "@wingriders/cab": "^2.0.30",
-    "@wingriders/wallet-common": "workspace:*",
     "borc": "^3.0.0",
     "nanoid": "^5.0.7"
   },
