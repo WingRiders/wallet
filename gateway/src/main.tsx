@@ -11,6 +11,8 @@ import {CssBaseline, ThemeProvider} from '@mui/material'
 import {useCreatedWalletStore} from './store/createdWallet'
 import {useWalletDataStore} from './store/walletData'
 import {theme} from './theme'
+import {ApolloProvider} from '@apollo/client'
+import {client} from './graphql/client'
 
 const router = createRouter({
   routeTree,
@@ -43,8 +45,10 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <RouterWithContext />
+        <ApolloProvider client={client}>
+          <CssBaseline />
+          <RouterWithContext />
+        </ApolloProvider>
       </ThemeProvider>
     </StrictMode>,
   )
