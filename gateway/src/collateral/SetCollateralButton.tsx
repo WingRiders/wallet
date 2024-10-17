@@ -1,5 +1,6 @@
 import {LoadingButton} from '@mui/lab'
 import {NETWORKS} from '@wingriders/cab/constants'
+import type {HexString, TxHash} from '@wingriders/cab/dappConnector'
 import {adaToLovelace} from '@wingriders/cab/helpers'
 import {
   BigNumber,
@@ -11,7 +12,7 @@ import type {Wallet} from '@wingriders/cab/wallet'
 import {WalletConnector, reverseAddress} from '@wingriders/cab/wallet/connector'
 import {useState} from 'react'
 import {EnterPasswordModal} from '../components/EnterPasswordModal'
-import {buildTx, signTx, submitTx} from '../helpers/actions'
+import {buildTx, signTx} from '../helpers/actions'
 import {getWalletOwner} from '../helpers/wallet'
 import {useWalletDataStore} from '../store/walletData'
 import type {ResultType} from '../types'
@@ -61,7 +62,10 @@ export const SetCollateralButton = ({onCreate}: SetCollateralButtonProps) => {
         txAux,
         txWitnessSet,
       })
-      await submitTx(cborizedTx.txBody)
+      await jsApi.submitRawTx(
+        cborizedTx.txBody as HexString,
+        cborizedTx.txHash as TxHash,
+      )
       setCollateral({txHash, outputIndex: 0})
       onCreate({isSuccess: true})
     } catch (e: any) {
