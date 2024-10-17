@@ -1,4 +1,5 @@
 import {ApolloClient, InMemoryCache} from '@apollo/client'
+import {config} from '../config'
 import {parseGqlTokenMetadata} from '../metadata/parse'
 import {updateTokensMetadataVar} from '../metadata/reactiveVars'
 import type {TokenMetadata} from './generated/graphql'
@@ -32,6 +33,6 @@ const cache = new InMemoryCache({
 })
 
 export const client = new ApolloClient({
-  uri: 'https://api.preprod.staging.wingriders.com/graphql',
+  uri: `${config.API_SERVER_URL_PREPROD}/graphql`,
   cache,
 })
