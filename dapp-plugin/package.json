@@ -1,11 +1,25 @@
 {
   "name": "@wingriders/wallet-dapp-plugin",
+  "version": "0.0.1",
+  "description": "Plugin for dApps that want to integrate WingRiders Wallet",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/WingRiders/wallet.git",
+    "directory": "dapp-plugin"
+  },
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "author": "WingRiders",
+  "license": "MIT",
   "files": [
     "dist"
+  ],
+  "keywords": [
+    "cardano",
+    "crypto",
+    "wallet"
   ],
   "scripts": {
     "clean": "rm -rf dist",
