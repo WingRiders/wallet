@@ -1,5 +1,9 @@
 import type {Account} from '@wingriders/cab/account'
-import type {CborHexString} from '@wingriders/cab/dappConnector'
+import type {JsCryptoProvider} from '@wingriders/cab/crypto'
+import type {
+  CborHexString,
+  Address as HexAddress,
+} from '@wingriders/cab/dappConnector'
 import {cborizeTxWitnesses} from '@wingriders/cab/ledger/transaction'
 import type {NetworkName, TxInputRef} from '@wingriders/cab/types'
 import {normalizeAddress, reverseTx} from '@wingriders/cab/wallet/connector'
@@ -9,6 +13,7 @@ import {
   MessageType,
 } from '@wingriders/wallet-common'
 import {encode} from 'borc'
+import {signData} from '../helpers/signData'
 import {getWalletData} from '../helpers/wallet'
 import {parseTransactionCbor} from '../transaction/parseCbor'
 
@@ -80,6 +85,35 @@ export const getSignTxResponseMessage = async (
     result: {
       isSuccess: true,
       data: encode(cborizedWitnessSet).toString('hex') as CborHexString,
+    },
+  }
+
+  return responseMessage
+}
+
+export const getSignDataResponseMessage = async (
+  signDataRequestMessage: ConcreteMessage<'SIGN_DATA_REQUEST'>,
+  account: Account,
+  cryptoProvider: JsCryptoProvider,
+) => {
+  const {address, payload} = signDataRequestMessage.payload
+
+  const addressPath = account.myAddresses.fixedPathMapper()(
+    address as string as HexAddress,
+  )
+  const signedData = await signData(
+    cryptoProvider,
+    address as string as HexAddress,
+    addressPath,
+    payload,
+  )
+
+  const responseMessage: Extract<Message, {type: 'SIGN_DATA_RESPONSE'}> = {
+    type: MessageType.SIGN_DATA_RESPONSE,
+    initId: signDataRequestMessage.initId,
+    result: {
+      isSuccess: true,
+      data: signedData,
     },
   }
 
