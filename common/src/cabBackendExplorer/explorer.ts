@@ -14,6 +14,7 @@ import type {
   TxSubmission,
   UTxO,
 } from '@wingriders/cab/types'
+import {chunk} from 'lodash'
 import {parseOgmiosProtocolParameters} from '../protocolParameters'
 import {type UTxOResponse, parseUTxOResponse} from './parse'
 
@@ -21,6 +22,8 @@ type CabBackendExplorerProps = {
   url: string
   network: NetworkName
 }
+
+const MAX_ADDRESS_FOR_UTXOS = 10
 
 export class CabBackendExplorer implements IBlockchainExplorer {
   private readonly url: string
@@ -34,10 +37,16 @@ export class CabBackendExplorer implements IBlockchainExplorer {
   async fetchUnspentTxOutputs(addresses: Array<BechAddress>): Promise<UTxO[]> {
     if (addresses.length === 0) return []
 
-    const utxos: UTxOResponse[] = await fetch(
-      `${this.url}/utxos?addresses=${addresses.join(',')}`,
-    ).then((res) => res.json())
-    return utxos.map(parseUTxOResponse)
+    const response: UTxO[] = []
+
+    for (const addressesChunk of chunk(addresses, MAX_ADDRESS_FOR_UTXOS)) {
+      const utxos: UTxOResponse[] = await fetch(
+        `${this.url}/utxos?addresses=${addressesChunk.join(',')}`,
+      ).then((res) => res.json())
+      response.push(...utxos.map(parseUTxOResponse))
+    }
+
+    return response
   }
 
   async isSomeAddressUsed(addresses: Array<BechAddress>): Promise<boolean> {
