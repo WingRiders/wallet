@@ -13,17 +13,30 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@fontsource/roboto": "^5.1.0",
+    "@mui/icons-material": "^6.1.0",
+    "@mui/lab": "^6.0.0-beta.10",
+    "@mui/material": "^6.1.0",
+    "@tanstack/react-router": "^1.57.18",
+    "@wingriders/cab": "^2.0.28",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.53.0",
+    "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.1",
+    "@rollup/plugin-inject": "^5.0.5",
+    "@tanstack/router-plugin": "^1.57.15",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "globals": "^15.9.0",
     "typescript": "^5.5.3",
     "vite": "^5.4.1",
+    "vite-plugin-node-polyfills": "^0.22.0",
     "vitest": "^2.1.1"
   }
 }
