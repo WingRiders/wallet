@@ -28,6 +28,7 @@
     "@wingriders/cab": "^2.0.30",
     "@wingriders/wallet-common": "workspace:*",
     "borc": "^3.0.0",
+    "cardano-crypto.js": "^6.1.2",
     "date-fns": "^4.1.0",
     "graphql": "^16.9.0",
     "react": "^18.3.1",
