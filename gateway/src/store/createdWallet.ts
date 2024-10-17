@@ -20,7 +20,7 @@ export const useCreatedWalletStore = create<CreatedWalletState>()(
       setCreatedWallet: (createdWallet) => set({createdWallet}),
     }),
     {
-      name: 'wallet-info',
+      name: 'created-wallet',
     },
   ),
 )
