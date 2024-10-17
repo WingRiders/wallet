@@ -34,6 +34,7 @@ export class WalletGateway implements IWalletGateway {
     tx: CborHexString,
     _partialSign?: boolean,
   ): Promise<CborHexString> {
+    // biome-ignore lint/suspicious/noConsole: <explanation>
     console.log('Transaction signed')
     return tx
   }
@@ -42,6 +43,7 @@ export class WalletGateway implements IWalletGateway {
     _addr: CborHexString,
     _sigStructure: CborHexString,
   ): Promise<HexString> {
+    // biome-ignore lint/suspicious/noConsole: <explanation>
     console.log('Data signed')
     return '' as HexString
   }
