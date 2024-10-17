@@ -1,3 +1,4 @@
+import {networkIdToNetworkName} from '@wingriders/cab/helpers'
 import type {Wallet} from '@wingriders/cab/wallet'
 import {
   type ConcreteMessage,
@@ -37,7 +38,12 @@ export const MessageHandler = () => {
         .when(
           (message) => isMessageWithType(message, MessageType.INIT_REQUEST),
           (message) =>
-            getInitResponseMessage(message, account, collateralUtxoRef),
+            getInitResponseMessage(
+              message,
+              account,
+              networkIdToNetworkName[wallet.getNetworkId()],
+              collateralUtxoRef,
+            ),
         )
         .when(
           (message) => isMessageWithType(message, MessageType.SIGN_TX_REQUEST),

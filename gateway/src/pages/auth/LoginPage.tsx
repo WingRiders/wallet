@@ -2,8 +2,8 @@ import LoginIcon from '@mui/icons-material/Login'
 import {LoadingButton} from '@mui/lab'
 import {Alert, Button, Stack, TextField, Typography} from '@mui/material'
 import {useNavigate} from '@tanstack/react-router'
-import {NetworkName} from '@wingriders/cab/types'
 import {type SubmitHandler, useForm} from 'react-hook-form'
+import {useShallow} from 'zustand/shallow'
 import {Page} from '../../components/Page'
 import {decryptData} from '../../helpers/encryption'
 import {getTextFieldErrorFields} from '../../helpers/forms'
@@ -18,7 +18,9 @@ type Inputs = {
 export const LoginPage = () => {
   const navigate = useNavigate()
 
-  const createdWallet = useCreatedWalletStore((s) => s.createdWallet)
+  const {createdWallet, network} = useCreatedWalletStore(
+    useShallow(({createdWallet, network}) => ({createdWallet, network})),
+  )
   const setWalletData = useWalletDataStore((s) => s.setWalletData)
 
   const {
@@ -50,7 +52,7 @@ export const LoginPage = () => {
     try {
       const {account} = await initWallet({
         mnemonic,
-        network: NetworkName.PREPROD,
+        network,
       })
 
       setWalletData(getWalletData(account))

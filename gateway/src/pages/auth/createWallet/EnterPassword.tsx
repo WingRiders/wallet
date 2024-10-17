@@ -2,7 +2,6 @@ import SendIcon from '@mui/icons-material/Send'
 import {LoadingButton} from '@mui/lab'
 import {Alert, Box, Button, Stack, TextField, Typography} from '@mui/material'
 import {useNavigate} from '@tanstack/react-router'
-import {NetworkName} from '@wingriders/cab/types'
 import {type SubmitHandler, useForm} from 'react-hook-form'
 import {useShallow} from 'zustand/shallow'
 import {encryptData} from '../../../helpers/encryption'
@@ -34,7 +33,9 @@ export const EnterPassword = () => {
       mnemonic,
     })),
   )
-  const setCreatedWallet = useCreatedWalletStore((s) => s.setCreatedWallet)
+  const {setCreatedWallet, network} = useCreatedWalletStore(
+    useShallow(({setCreatedWallet, network}) => ({setCreatedWallet, network})),
+  )
   const setWalletData = useWalletDataStore((s) => s.setWalletData)
 
   const {
@@ -51,7 +52,7 @@ export const EnterPassword = () => {
     try {
       const {account} = await initWallet({
         mnemonic: mnemonicInStore,
-        network: NetworkName.PREPROD,
+        network,
       })
 
       const {
