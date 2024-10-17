@@ -1,1 +1,1 @@
-export const plugin = 0
+export {InitDappPluginOptions, initDappPlugin} from './init/init'
