@@ -5,6 +5,7 @@ import {
   JsCryptoProvider,
   mnemonicToWalletSecretDef,
 } from '@wingriders/cab/crypto'
+import type {JsAPI} from '@wingriders/cab/dappConnector'
 import type {NetworkName} from '@wingriders/cab/types'
 import {Wallet} from '@wingriders/cab/wallet'
 import type {WalletData} from '../store/walletData'
@@ -52,4 +53,16 @@ export const getWalletData = (account: Account): WalletData => {
     rewardAddresses,
     utxos,
   }
+}
+
+export const getWalletOwner = async (jsApi: JsAPI) => {
+  const ownerAddress =
+    (await jsApi.getUsedAddresses())?.[0] ??
+    (await jsApi.getUnusedAddresses())[0]
+
+  if (!ownerAddress) {
+    throw new Error('No address found for wallet')
+  }
+
+  return ownerAddress
 }
