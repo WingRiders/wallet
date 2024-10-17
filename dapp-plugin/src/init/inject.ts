@@ -3,7 +3,12 @@ import type {
   StandardWallet as StandardWalletApi,
 } from '@wingriders/cab/dappConnector'
 import {aggregateTokenBundles} from '@wingriders/cab/ledger/assets'
-import {BigNumber, type Lovelace, type NetworkName} from '@wingriders/cab/types'
+import {
+  BigNumber,
+  type Lovelace,
+  type NetworkName,
+  type UTxO,
+} from '@wingriders/cab/types'
 import {NETWORK_NAME_TO_API_NETWORK_ID} from '../constants'
 import type {IDataApi} from '../dataApi/types'
 import type {IWalletGateway} from '../gateway/types'
@@ -97,7 +102,18 @@ const createCborApi = async (args: CreateCborApiOptions): Promise<CborAPI> => {
   })()
   const networkId = NETWORK_NAME_TO_API_NETWORK_ID[network]
   const usedBechAddresses = usedAddresses.map(hexAddressToBechAddress(network))
-  const getUtxos = () => dataApi.getUtxos(usedBechAddresses)
+
+  const matchCollateralUtxo = (utxo: UTxO) =>
+    collateralUtxoRef &&
+    utxo.txHash === collateralUtxoRef.txHash &&
+    utxo.outputIndex === collateralUtxoRef.outputIndex
+
+  const getUtxos = async (withCollateral = false) => {
+    const allUtxos = await dataApi.getUtxos(usedBechAddresses)
+    return withCollateral
+      ? allUtxos
+      : allUtxos.filter((utxo) => !matchCollateralUtxo(utxo))
+  }
 
   const cborApi: CborAPI = {
     async getNetworkId() {
@@ -142,14 +158,8 @@ const createCborApi = async (args: CreateCborApiOptions): Promise<CborAPI> => {
     },
     async getCollateral(_params) {
       if (!collateralUtxoRef) return null
-      const utxos = await getUtxos()
-      return utxos
-        .filter(
-          (utxo) =>
-            utxo.txHash === collateralUtxoRef.txHash &&
-            utxo.outputIndex === collateralUtxoRef.outputIndex,
-        )
-        .map(utxoToWalletCbor)
+      const utxos = await getUtxos(true)
+      return utxos.filter(matchCollateralUtxo).map(utxoToWalletCbor)
     },
   }
   return cborApi
