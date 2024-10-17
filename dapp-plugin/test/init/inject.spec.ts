@@ -1,4 +1,4 @@
-import {describe, expect, test} from 'vitest'
+import {describe, expect, test} from 'bun:test'
 import type {StandardWallet as StandardWalletApi} from '@wingriders/cab/dappConnector'
 import {CborToJsApiBridge, reverseUtxos} from '@wingriders/cab/wallet/connector'
 
@@ -18,7 +18,7 @@ import {
   MOCKED_WALLET_VERSION,
   MOCKED_WALLET_ICON,
 } from '../mocks/values'
-import {networkNameToNetworkId} from '@wingriders/cab/helpers'
+import {NETWORK_NAME_TO_API_NETWORK_ID} from '../../src/constants'
 
 declare const window: typeof globalThis.window & {
   cardano?: {
@@ -55,7 +55,7 @@ describe('inject', () => {
     expect(wrtWallet.name).toEqual(MOCKED_WALLET_NAME)
     expect(wrtWallet.apiVersion).toEqual(MOCKED_WALLET_VERSION)
     expect(wrtWallet.icon).toEqual(MOCKED_WALLET_ICON)
-    expect(networkId).toEqual(networkNameToNetworkId[MOCKED_NETWORK])
+    expect(networkId).toEqual(NETWORK_NAME_TO_API_NETWORK_ID[MOCKED_NETWORK])
     expect(usedAddresses).toEqual(MOCKED_USED_ADDRESSES)
     expect(unusedAddresses).toEqual(MOCKED_UNUSED_ADDRESSES)
     expect(changeAddress).toEqual(MOCKED_CHANGE_ADDRESS)

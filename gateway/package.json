@@ -9,8 +9,8 @@
     "preview": "vite preview",
     "check": "bun gql-gen && bun biome check src",
     "fix": "bun gql-gen && bun run check --write",
-    "test": "bun gql-gen && vitest run",
-    "test:watch": "bun gql-gen && vitest",
+    "test": "bun gql-gen && bun test",
+    "test:watch": "bun gql-gen && bun test --watch",
     "gql-gen": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.1",
+    "@happy-dom/global-registrator": "^15.7.4",
     "@graphql-codegen/cli": "5.0.2",
     "@graphql-codegen/client-preset": "4.3.3",
     "@rollup/plugin-inject": "^5.0.5",
@@ -41,10 +42,8 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "globals": "^15.9.0",
-    "happy-dom": "^15.7.4",
     "typescript": "^5.5.3",
     "vite": "^5.4.1",
-    "vite-plugin-node-polyfills": "^0.22.0",
-    "vitest": "^2.1.1"
+    "vite-plugin-node-polyfills": "^0.22.0"
   }
 }
