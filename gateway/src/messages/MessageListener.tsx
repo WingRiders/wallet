@@ -6,7 +6,7 @@ import {
 import {useEffect} from 'react'
 import {useShallow} from 'zustand/shallow'
 import {useMessagesStore} from '../store/messages'
-import {getResponseMessageType} from './response'
+import {getDeclinedErrorCode, getResponseMessageType} from './response'
 
 type MessageListenerProps = {
   children?: React.ReactNode
@@ -58,7 +58,13 @@ export const MessageListener = ({children}: MessageListenerProps) => {
         const responseMessage: ConcreteMessage<typeof responseMessageType> = {
           type: responseMessageType,
           initId: pendingMessage.message.initId,
-          result: {isSuccess: false, errorMessage: 'User closed the window'},
+          result: {
+            isSuccess: false,
+            error: {
+              code: getDeclinedErrorCode(pendingMessage.message.type),
+              info: 'User closed the window',
+            },
+          },
         }
 
         pendingMessage.eventSource.postMessage(responseMessage, {

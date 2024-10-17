@@ -50,7 +50,12 @@ const createResponseResult = <TDataSchema extends z.ZodSchema>(
     }),
     z.strictObject({
       isSuccess: z.literal(false),
-      errorMessage: z.string().optional(),
+      error: z
+        .object({
+          code: z.number().optional(),
+          info: z.string().optional(),
+        })
+        .optional(),
     }),
   ])
 

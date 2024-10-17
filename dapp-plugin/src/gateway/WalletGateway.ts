@@ -24,8 +24,7 @@ export class WalletGateway implements IWalletGateway {
       },
       MessageType.INIT_RESPONSE,
     )
-    if (!initResponse.result.isSuccess)
-      throw new Error(initResponse.result.errorMessage)
+    if (!initResponse.result.isSuccess) throw initResponse.result.error
 
     const {
       network,
@@ -61,8 +60,7 @@ export class WalletGateway implements IWalletGateway {
       },
       MessageType.SIGN_TX_RESPONSE,
     )
-    if (!signTxResponse.result.isSuccess)
-      throw new Error(signTxResponse.result.errorMessage)
+    if (!signTxResponse.result.isSuccess) throw signTxResponse.result.error
 
     return signTxResponse.result.data
   }
@@ -83,8 +81,7 @@ export class WalletGateway implements IWalletGateway {
       },
       MessageType.SIGN_DATA_RESPONSE,
     )
-    if (!signDataResponse.result.isSuccess)
-      throw new Error(signDataResponse.result.errorMessage)
+    if (!signDataResponse.result.isSuccess) throw signDataResponse.result.error
 
     return signDataResponse.result.data
   }
