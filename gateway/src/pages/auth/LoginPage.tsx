@@ -67,7 +67,7 @@ export const LoginPage = () => {
   }
 
   return (
-    <Page>
+    <Page showHeader headerProps={{showWalletActions: false}}>
       <Typography variant="h3">Login</Typography>
 
       <Typography mt={4} mb={3} variant="h5">
