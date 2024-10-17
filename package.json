@@ -3,6 +3,7 @@
   "workspaces": [
     "dapp-plugin",
     "gateway",
+    "gateway-server",
     "example-app",
     "common"
   ],
