@@ -55,17 +55,21 @@ export class CabBackendExplorer implements IBlockchainExplorer {
   }
 
   async submitTxRaw(_txHash: string, txBody: string): Promise<TxSubmission> {
-    const res: string = await fetch(`${this.url}/submitTx`, {
+    const res = await fetch(`${this.url}/submitTx`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({transactionCbor: txBody}),
-    }).then((res) => res.text())
+    })
 
-    return {
-      txHash: res,
+    if (!res.ok) {
+      const error = await res.json()
+      throw new Error(`Failed to submit transaction: ${JSON.stringify(error)}`)
     }
+
+    const txHash = await res.text()
+    return {txHash}
   }
 
   async filterUsedAddresses(
