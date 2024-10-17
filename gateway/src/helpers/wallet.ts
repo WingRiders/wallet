@@ -1,5 +1,4 @@
 import type {Account} from '@wingriders/cab/account'
-import {BlockchainExplorer} from '@wingriders/cab/blockchainExplorer'
 import {NETWORKS} from '@wingriders/cab/constants'
 import {
   JsCryptoProvider,
@@ -8,6 +7,7 @@ import {
 import type {JsAPI} from '@wingriders/cab/dappConnector'
 import type {NetworkName} from '@wingriders/cab/types'
 import {Wallet} from '@wingriders/cab/wallet'
+import {CabBackendExplorer} from '@wingriders/wallet-common'
 import type {WalletData} from '../store/walletData'
 
 type InitWalletProps = {
@@ -17,9 +17,7 @@ type InitWalletProps = {
 
 export const initWallet = async ({mnemonic, network}: InitWalletProps) => {
   const wallet = new Wallet({
-    blockchainExplorer: new BlockchainExplorer({
-      baseUrl: 'https://explorer.preprod.staging.wingriders.com',
-    }),
+    blockchainExplorer: new CabBackendExplorer('http://127.0.0.1:3000'),
     cryptoProvider: new JsCryptoProvider({
       walletSecretDef: await mnemonicToWalletSecretDef(mnemonic),
       network: NETWORKS[network],
