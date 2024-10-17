@@ -21,7 +21,7 @@ declare const window: typeof globalThis.window & {
   }
 }
 
-const cachedCborApi: CborAPI | null = null
+let cachedCborApi: CborAPI | null = null
 
 type InjectCborApiOptions = {
   gateway: IWalletGateway
@@ -46,7 +46,10 @@ export const injectCborApi = ({
     apiVersion,
     icon,
     isEnabled: async () => cachedCborApi != null,
-    enable: async () => cachedCborApi ?? createCborApi({gateway, getDataApi}),
+    enable: async () => {
+      cachedCborApi ??= await createCborApi({gateway, getDataApi})
+      return cachedCborApi
+    },
   }
 }
 
