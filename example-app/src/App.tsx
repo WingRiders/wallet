@@ -7,11 +7,12 @@ import type {
   StandardWallet as StandardWalletApi,
   TxHash,
 } from '@wingriders/cab/dappConnector'
+import {networkIdToNetworkName} from '@wingriders/cab/helpers'
 import {assetQuantity} from '@wingriders/cab/ledger/assets'
 import {
   BigNumber,
   type Lovelace,
-  NetworkName,
+  type NetworkName,
   type TxPlanArgs,
   type UTxO,
 } from '@wingriders/cab/types'
@@ -39,6 +40,7 @@ declare const window: typeof globalThis.window & {
 export const App = () => {
   const [walletData, setWalletData] = useState<{
     jsApi: JsAPI
+    networkName: NetworkName
     lovelaceBalance: BigNumber
     address: string
     utxos: UTxO[]
@@ -68,12 +70,13 @@ export const App = () => {
 
       const cborApi = await wrWallet.enable()
       const jsApi = new CborToJsApiBridge(cborApi)
+      const networkName = networkIdToNetworkName[await jsApi.getNetworkId()]
       const balanceValue = reverseValue(await jsApi.getBalance())
       const lovelaceBalance = assetQuantity(balanceValue, AdaAsset)
       const address = reverseAddress(await getWalletOwner(jsApi))
       const utxos = reverseUtxos(await jsApi.getUtxos())
 
-      setWalletData({jsApi, lovelaceBalance, address, utxos})
+      setWalletData({networkName, jsApi, lovelaceBalance, address, utxos})
       setIsLoadingConnect(false)
     } catch (e) {
       setIsLoadingConnect(false)
@@ -92,7 +95,9 @@ export const App = () => {
       setIsLoadingExampleTx(true)
       const ownerHexAddress = await getWalletOwner(walletData.jsApi)
       const ownerBechAddress = reverseAddress(ownerHexAddress)
-      const protocolParameters = await getCachedProtocolParameters()
+      const networkName =
+        networkIdToNetworkName[await walletData.jsApi.getNetworkId()]
+      const protocolParameters = await getCachedProtocolParameters(networkName)
 
       const planArgs: TxPlanArgs = {
         planId: 'example',
@@ -109,7 +114,7 @@ export const App = () => {
       const {tx, txAux, txWitnessSet} = await buildTx({
         jsApi: walletData.jsApi,
         planArgs,
-        network: NETWORKS[NetworkName.PREPROD],
+        network: NETWORKS[networkName],
       })
       const {cborizedTx} = await signTx({
         jsApi: walletData.jsApi,
@@ -157,6 +162,10 @@ export const App = () => {
               {walletData.lovelaceBalance.shiftedBy(-ADA_DECIMALS).toFormat()}{' '}
               ADA
             </Typography>
+          </Section>
+
+          <Section title="Network">
+            <Typography variant="body1">{walletData.networkName}</Typography>
           </Section>
 
           <Section title="Address">

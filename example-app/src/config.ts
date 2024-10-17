@@ -1,3 +1,4 @@
+import {NetworkName} from '@wingriders/cab/types'
 import {z} from 'zod'
 
 const configSchema = z.object({
@@ -14,3 +15,8 @@ const loadConfig = () =>
   })
 
 export const config = loadConfig()
+
+export const cabServerUrlByNetwork: Record<NetworkName, string> = {
+  [NetworkName.PREPROD]: config.CAB_SERVER_URL_PREPROD,
+  [NetworkName.MAINNET]: config.CAB_SERVER_URL_MAINNET,
+}
