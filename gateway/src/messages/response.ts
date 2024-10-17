@@ -8,7 +8,7 @@ import {
   TxSignErrorCode,
 } from '@wingriders/cab/dappConnector'
 import {cborizeTxWitnesses} from '@wingriders/cab/ledger/transaction'
-import type {NetworkName, TxInputRef} from '@wingriders/cab/types'
+import type {NetworkId, NetworkName, TxInputRef} from '@wingriders/cab/types'
 import {normalizeAddress, reverseTx} from '@wingriders/cab/wallet/connector'
 import {
   type ConcreteMessage,
@@ -75,10 +75,11 @@ export const getInitResponseMessage = (
 export const getSignTxResponseMessage = async (
   signTxRequestMessage: ConcreteMessage<'SIGN_TX_REQUEST'>,
   account: Account,
+  networkId: NetworkId,
 ) => {
   const txCbor = signTxRequestMessage.payload.tx
 
-  const parsedTx = parseTransactionCbor(txCbor)
+  const parsedTx = parseTransactionCbor(txCbor, networkId)
   const txAux = reverseTx(parsedTx, account.getUtxos())
   const witnessSet = await account.witnessTxAux(txAux)
 

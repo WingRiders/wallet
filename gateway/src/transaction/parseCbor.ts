@@ -1,11 +1,11 @@
 import {AdaAsset} from '@wingriders/cab/constants'
 import {
-  type Address,
   type AddressKeyHash,
   NetworkId as ApiNetworkId,
   type AssetName,
   type Coin,
   type Hash32,
+  type Address as HexAddress,
   type HexString,
   type MintValue,
   type PlutusDatum,
@@ -20,19 +20,26 @@ import {
   type TxOutputPostAlonzo,
   TxOutputType,
   type TxScriptRef,
+  type TxScriptType,
   type TxWitnessSet,
   type UInt,
   type Value,
   type Withdrawals,
 } from '@wingriders/cab/dappConnector'
+import {encodeAddress} from '@wingriders/cab/ledger/address'
 import {
   CborInt64,
   CborizedTxDatum,
-  type CborizedTxScriptRef,
   TxBodyKey,
 } from '@wingriders/cab/ledger/transaction'
-import {BigNumber, NetworkId, type TxCertificate} from '@wingriders/cab/types'
-import {decode, encode} from 'borc'
+import {
+  BigNumber,
+  NetworkId,
+  type TxCertificate,
+  TxCertificateType,
+} from '@wingriders/cab/types'
+import {type Tagged, decode, encode} from 'borc'
+import {packRewardAddress} from 'cardano-crypto.js'
 import {
   type CborizedDatumOption,
   type CborizedTxBody,
@@ -46,11 +53,15 @@ import {
   type CborizedTxWithdrawals,
   type CborizedTxWitnessShelley,
   type CborizedTxWitnesses,
+  TxCertificateKey,
   TxOutputKey,
   TxWitnessKey,
 } from './types'
 
-export const parseTransactionCbor = (cbor: string): Transaction => {
+export const parseTransactionCbor = (
+  cbor: string,
+  networkId: NetworkId,
+): Transaction => {
   const decoded = decode(cbor)
   if (!Array.isArray(decoded) || decoded.length !== 4)
     throw new Error('Invalid transaction CBOR')
@@ -58,7 +69,7 @@ export const parseTransactionCbor = (cbor: string): Transaction => {
   const [txBody, txWitnessSet, isValid, auxiliaryData] = decoded
 
   const transaction: Transaction = {
-    body: parseTxBody(txBody),
+    body: parseTxBody(txBody, networkId),
     isValid,
     witnessSet: parseTxWitnessSet(txWitnessSet),
     auxiliaryData,
@@ -66,7 +77,10 @@ export const parseTransactionCbor = (cbor: string): Transaction => {
   return transaction
 }
 
-const parseTxBody = (decodedTxBody: CborizedTxBody): TxBody => {
+const parseTxBody = (
+  decodedTxBody: CborizedTxBody,
+  networkId: NetworkId,
+): TxBody => {
   const inputs = decodedTxBody.get(TxBodyKey.INPUTS) as CborizedTxInput[]
   const outputs = decodedTxBody.get(TxBodyKey.OUTPUTS) as CborizedTxOutput[]
   const fee = new CborInt64(decodedTxBody.get(TxBodyKey.FEE) as number)
@@ -75,7 +89,7 @@ const parseTxBody = (decodedTxBody: CborizedTxBody): TxBody => {
     | CborizedTxCertificate[]
     | undefined
   const withdrawals = decodedTxBody.get(TxBodyKey.WITHDRAWALS) as
-    | CborizedTxWithdrawals[]
+    | CborizedTxWithdrawals
     | undefined
   const auxiliaryDataHash = decodedTxBody.get(TxBodyKey.AUXILIARY_DATA_HASH) as
     | Buffer
@@ -100,17 +114,21 @@ const parseTxBody = (decodedTxBody: CborizedTxBody): TxBody => {
   const scriptDataHash = decodedTxBody.get(TxBodyKey.SCRIPT_DATA_HASH) as
     | Buffer
     | undefined
-  const networkId = decodedTxBody.get(TxBodyKey.NETWORK_ID) as NetworkId
-  const referenceInputs = decodedTxBody.get(
-    TxBodyKey.REFERENCE_INPUTS,
-  ) as CborizedTxInput[]
+  const txNetworkId = decodedTxBody.get(TxBodyKey.NETWORK_ID) as
+    | NetworkId
+    | undefined
+  const referenceInputs = decodedTxBody.get(TxBodyKey.REFERENCE_INPUTS) as
+    | CborizedTxInput[]
+    | undefined
 
   return {
     inputs: parseCborizedInputs(inputs),
     outputs: outputs.map(parseCborizedTxOutput),
     fee: fee.bigNumber as Coin,
     ttl: ttl.bigNumber as UInt,
-    certificates: certificates?.map(parseCborizedCertificate),
+    certificates: certificates?.map((certificate) =>
+      parseCborizedCertificate(certificate, networkId),
+    ),
     withdrawals: withdrawals
       ? parseCborizedWithdrawals(withdrawals)
       : undefined,
@@ -128,9 +146,11 @@ const parseTxBody = (decodedTxBody: CborizedTxBody): TxBody => {
       : undefined,
     scriptDataHash: scriptDataHash?.toString('hex') as Hash32,
     networkId:
-      networkId === NetworkId.MAINNET
-        ? ApiNetworkId.Mainnet
-        : ApiNetworkId.Testnet,
+      txNetworkId != null
+        ? txNetworkId === NetworkId.MAINNET
+          ? ApiNetworkId.Mainnet
+          : ApiNetworkId.Testnet
+        : undefined,
     referenceInputs: referenceInputs
       ? parseCborizedInputs(referenceInputs)
       : undefined,
@@ -209,11 +229,9 @@ const parseCborizedTxDatumOption = (
   }
 }
 
-// TODO
-const parseCborizedScriptRef = (
-  _scriptRef: CborizedTxScriptRef,
-): TxScriptRef => {
-  throw new Error('Not implemented')
+const parseCborizedScriptRef = (scriptRef: Tagged<Buffer>): TxScriptRef => {
+  const [type, scriptBytes]: [TxScriptType, Buffer] = decode(scriptRef.value)
+  return {type, script: scriptBytes.toString('hex') as PlutusScript}
 }
 
 const parseCborizedTxOutput = (output: CborizedTxOutput): TxOutput => {
@@ -221,7 +239,7 @@ const parseCborizedTxOutput = (output: CborizedTxOutput): TxOutput => {
     const [address, value, datumHash] = output
     return {
       type: TxOutputType.LEGACY,
-      address: address.toString('hex') as Address,
+      address: address.toString('hex') as HexAddress,
       value: parseCborizedTxValue(value),
       datumHash: datumHash?.toString('hex') as Hash32,
     }
@@ -231,14 +249,14 @@ const parseCborizedTxOutput = (output: CborizedTxOutput): TxOutput => {
     | CborizedDatumOption
     | undefined
   const cborizedScriptRef = output.get(TxOutputKey.OUTPUT_KEY_SCRIPT_REF) as
-    | CborizedTxScriptRef
+    | Tagged<Buffer>
     | undefined
 
   return {
     type: TxOutputType.POST_ALONZO,
     address: output
       .get(TxOutputKey.OUTPUT_KEY_ADDRESS)!
-      .toString('hex') as Address,
+      .toString('hex') as HexAddress,
     value: parseCborizedTxValue(
       output.get(TxOutputKey.OUTPUT_KEY_VALUE)! as CborizedTxValue,
     ),
@@ -301,18 +319,50 @@ const parseCborizedTxValue = (value: CborizedTxValue): Value => {
   return res
 }
 
-// TODO
 const parseCborizedCertificate = (
-  _cert: CborizedTxCertificate,
+  certificate: CborizedTxCertificate,
+  networkId: NetworkId,
 ): TxCertificate => {
-  throw new Error('Not implemented')
+  const certificateType = certificate[0]
+  const stakingAddress = encodeAddress(
+    packRewardAddress(certificate[1][1], networkId),
+  )
+
+  if (certificateType === TxCertificateKey.DELEGATION) {
+    return {
+      type: TxCertificateType.DELEGATION,
+      stakingAddress,
+      poolHash: certificate[2].toString('hex'),
+    }
+  }
+  if (certificateType === TxCertificateKey.STAKING_KEY_DEREGISTRATION) {
+    return {
+      type: TxCertificateType.STAKING_KEY_DEREGISTRATION,
+      stakingAddress,
+    }
+  }
+  if (certificateType === TxCertificateKey.STAKING_KEY_REGISTRATION) {
+    return {
+      type: TxCertificateType.STAKING_KEY_REGISTRATION,
+      stakingAddress,
+    }
+  }
+
+  throw new Error(`Certificate type not implemented: ${certificateType}`)
 }
 
-// TODO
 const parseCborizedWithdrawals = (
-  _withdrawals: CborizedTxWithdrawals[],
+  withdrawals: CborizedTxWithdrawals,
 ): Withdrawals => {
-  throw new Error('Not implemented')
+  const res: Withdrawals = new Map()
+  withdrawals.forEach((amount, address) => {
+    res.set(
+      address.toString('hex') as HexAddress,
+      cborInt64ToBigNumber(amount) as Coin,
+    )
+  })
+
+  return res
 }
 
 const cborizedTxTokenBundleToMintValue = (
