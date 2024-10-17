@@ -1,0 +1,14 @@
+name: 'Mirror main branch'
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  mirror:
+    if: github.repository != 'WingRiders/wallet' # Prevent execution in the public repo
+    uses: WingRiders/wallet-private/.github/workflows/mirror.yml@main
+    with:
+      branch: main
