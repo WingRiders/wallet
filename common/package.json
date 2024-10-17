@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@wingriders/cab": "^2.0.28",
+    "lodash": "^4.17.21",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -21,6 +22,7 @@
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",
+    "@types/lodash": "^4.17.9",
     "happy-dom": "^15.7.4",
     "rollup": "^4.21.3",
     "rollup-plugin-dts": "^6.1.1",
