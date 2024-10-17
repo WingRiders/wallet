@@ -12,7 +12,7 @@ import {
 import {useQuery} from '@tanstack/react-query'
 import {AdaAsset} from '@wingriders/cab/constants'
 import type {TxInput} from '@wingriders/cab/dappConnector'
-import {assetId} from '@wingriders/cab/helpers'
+import {assetId, networkNameToNetworkId} from '@wingriders/cab/helpers'
 import {
   invertValue,
   tokenBundleToValue,
@@ -60,12 +60,15 @@ export const SignTxRequestMessageDisplay = ({
   const addresses = useWalletDataStore((s) => s.addresses)
 
   const {transaction, txHash} = useMemo(() => {
-    const transaction = parseTransactionCbor(item.message.payload.tx)
+    const transaction = parseTransactionCbor(
+      item.message.payload.tx,
+      networkNameToNetworkId[network],
+    )
     return {
       transaction,
       txHash: reverseTx(transaction, []).getId(),
     }
-  }, [item.message.payload.tx])
+  }, [item.message.payload.tx, network])
 
   const {data: txUtxos, isLoading: isLoadingInputUtxos} = useQuery({
     queryKey: [

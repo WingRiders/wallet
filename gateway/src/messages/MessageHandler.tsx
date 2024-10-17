@@ -1,6 +1,9 @@
 import type {JsCryptoProvider} from '@wingriders/cab/crypto'
 import {APIErrorCode} from '@wingriders/cab/dappConnector'
-import {networkIdToNetworkName} from '@wingriders/cab/helpers'
+import {
+  networkIdToNetworkName,
+  networkNameToNetworkId,
+} from '@wingriders/cab/helpers'
 import type {Wallet} from '@wingriders/cab/wallet'
 import {
   type ConcreteMessage,
@@ -11,6 +14,7 @@ import {useState} from 'react'
 import {match} from 'ts-pattern'
 import {EnterPasswordModal} from '../components/EnterPasswordModal'
 import {Page} from '../components/Page'
+import {useCreatedWalletStore} from '../store/createdWallet'
 import {useMessagesStore} from '../store/messages'
 import {useWalletDataStore} from '../store/walletData'
 import {MessageDisplay} from './display/MessageDisplay'
@@ -27,6 +31,7 @@ export const MessageHandler = () => {
   const [isLoading, setIsLoading] = useState(false)
   const pendingRequestMessage = useMessagesStore((s) => s.pendingMessage)
   const collateralUtxoRef = useWalletDataStore((s) => s.collateral)
+  const network = useCreatedWalletStore((s) => s.network)
 
   if (!pendingRequestMessage) return null
 
@@ -54,7 +59,12 @@ export const MessageHandler = () => {
         )
         .when(
           (message) => isMessageWithType(message, MessageType.SIGN_TX_REQUEST),
-          (message) => getSignTxResponseMessage(message, account),
+          (message) =>
+            getSignTxResponseMessage(
+              message,
+              account,
+              networkNameToNetworkId[network],
+            ),
         )
         .when(
           (message) =>
