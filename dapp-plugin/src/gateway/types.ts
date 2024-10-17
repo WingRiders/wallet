@@ -1,7 +1,7 @@
 import type {
   Address,
   CborHexString,
-  HexString,
+  DataSignature,
 } from '@wingriders/cab/dappConnector'
 import type {NetworkName, TxInputRef} from '@wingriders/cab/types'
 
@@ -20,5 +20,8 @@ export type InitWalletGatewayResponse = {
 export type IWalletGateway = {
   init(): Promise<InitWalletGatewayResponse>
   signTx(tx: CborHexString, partialSign?: boolean): Promise<CborHexString>
-  signData(addr: CborHexString, sigStructure: CborHexString): Promise<HexString>
+  signData(
+    address: CborHexString,
+    payload: CborHexString,
+  ): Promise<DataSignature>
 }

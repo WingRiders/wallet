@@ -108,8 +108,8 @@ const createCborApi = async ({
     async signTx(tx, partialSign) {
       return gateway.signTx(tx, partialSign)
     },
-    async signData(addr, sigStructure) {
-      return gateway.signData(addr, sigStructure)
+    async signData(address, payload) {
+      return gateway.signData(address, payload)
     },
     async submitTx(tx) {
       return dataApi.submitTx(tx)
