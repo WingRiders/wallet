@@ -1,9 +1,7 @@
-import type {
-  CborHexString,
-  Address as HexAddress,
-  HexString,
-} from '@wingriders/cab/dappConnector'
-import {NetworkName} from '@wingriders/cab/types'
+import type {CborHexString, HexString} from '@wingriders/cab/dappConnector'
+import {MessageType} from '@wingriders/wallet-common'
+import {nanoid} from 'nanoid'
+import {sendGatewayMessageAndWaitForResponse} from '../messages/send'
 import type {IWalletGateway} from './types'
 
 type WalletGatewayOptions = {
@@ -18,33 +16,76 @@ export class WalletGateway implements IWalletGateway {
   }
 
   async init() {
+    const initResponse = await sendGatewayMessageAndWaitForResponse(
+      this.url,
+      {
+        type: MessageType.INIT_REQUEST,
+        initId: nanoid(),
+      },
+      MessageType.INIT_RESPONSE,
+    )
+    if (!initResponse.result.isSuccess)
+      throw new Error(initResponse.result.errorMessage)
+
+    const {
+      network,
+      usedAddresses,
+      unusedAddresses,
+      changeAddress,
+      rewardAddresses,
+      collateralUtxoRef,
+    } = initResponse.result.data
     return {
-      network: NetworkName.PREPROD,
-      usedAddresses: [
-        '00b47c7c0ca235a188003fde3e6a583141a89125f346572bb87e81a8702966ddf1dacf046d52483389174713c212a3b549370f996066569251',
-      ] as HexAddress[],
-      unusedAddresses: [],
-      changeAddress: '' as HexAddress,
-      rewardAddresses: [],
-      collateralUtxos: [],
+      network,
+      usedAddresses,
+      unusedAddresses,
+      changeAddress,
+      rewardAddresses,
+      collateralUtxoRef,
     }
   }
 
   async signTx(
     tx: CborHexString,
-    _partialSign?: boolean,
+    partialSign?: boolean,
   ): Promise<CborHexString> {
-    // biome-ignore lint/suspicious/noConsole: <explanation>
-    console.log('Transaction signed')
-    return tx
+    const signTxResponse = await sendGatewayMessageAndWaitForResponse(
+      this.url,
+      {
+        type: MessageType.SIGN_TX_REQUEST,
+        initId: nanoid(),
+        payload: {
+          tx,
+          partialSign,
+        },
+      },
+      MessageType.SIGN_TX_RESPONSE,
+    )
+    if (!signTxResponse.result.isSuccess)
+      throw new Error(signTxResponse.result.errorMessage)
+
+    return signTxResponse.result.data
   }
 
   async signData(
-    _addr: CborHexString,
-    _sigStructure: CborHexString,
+    addr: CborHexString,
+    sigStructure: CborHexString,
   ): Promise<HexString> {
-    // biome-ignore lint/suspicious/noConsole: <explanation>
-    console.log('Data signed')
-    return '' as HexString
+    const signDataResponse = await sendGatewayMessageAndWaitForResponse(
+      this.url,
+      {
+        type: MessageType.SIGN_DATA_REQUEST,
+        initId: nanoid(),
+        payload: {
+          addr,
+          sigStructure,
+        },
+      },
+      MessageType.SIGN_DATA_RESPONSE,
+    )
+    if (!signDataResponse.result.isSuccess)
+      throw new Error(signDataResponse.result.errorMessage)
+
+    return signDataResponse.result.data
   }
 }
