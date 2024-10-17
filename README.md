@@ -3,11 +3,11 @@
 WingRiders Wallet is a open-source, one-click wallet for Cardano that doesn't need any browser extensions and works in all browsers and platforms. The wallet consists of two parts:
 
 1. Wallet dApp plugin
-2. Seed phrase gateway website (not implemented yet)
+2. Seed phrase gateway website
 
 ## Wallet dApp plugin
 
-The Wallet dApp plugin can be used by dApps to inject [CIP-0030](https://developers.cardano.org/docs/governance/cardano-improvement-proposals/cip-0030/) compatible API into the browser. In the current stage of development, the injected API will return only mocked data. If you are a dApp and you want to integrate WingRiders Wallet, you can follow these easy steps:
+The Wallet dApp plugin can be used by dApps to inject [CIP-0030](https://developers.cardano.org/docs/governance/cardano-improvement-proposals/cip-0030/) compatible API into the browser. If you are a dApp and you want to integrate WingRiders Wallet, you can follow these easy steps:
 
 1. Install `@wingriders/wallet-dapp-plugin` package:
 
@@ -24,18 +24,16 @@ import { initDappPlugin } from "@wingriders/wallet-dapp-plugin";
 
 const connectWingRidersWallet = () => {
   initDappPlugin({
-    gatewayUrl: "TBD",
+    gatewayUrl: "https://wallet.wingriders.com",
     cabBackendUrlByNetwork: {
-      preprod: "TBD",
-      mainnet: "TBD",
+      preprod: "https://cab-server.preprod.wingriders.com",
+      mainnet: "https://cab-server.mainnet.wingriders.com",
     },
   });
 
   const wallet = window.cardano.wrWallet; // follows the CIP-0030 Wallet API
 };
 ```
-
-> Please note that `gatewayUrl` and `cabBackendUrlByNetwork` are currently irrelevant and they will be provided later.
 
 ## Development
 
