@@ -1,9 +1,9 @@
 import SendIcon from '@mui/icons-material/Send'
-import {LoadingButton} from '@mui/lab'
-import {Alert, Box, Button, Stack, TextField, Typography} from '@mui/material'
+import {Alert, Box, Stack, TextField, Typography} from '@mui/material'
 import {useNavigate} from '@tanstack/react-router'
 import {type SubmitHandler, useForm} from 'react-hook-form'
 import {useShallow} from 'zustand/shallow'
+import {FlowNavigation} from '../../../components/FlowNavigation'
 import {encryptData} from '../../../helpers/encryption'
 import {getTextFieldErrorFields} from '../../../helpers/forms'
 import {validatePassword} from '../../../helpers/validation'
@@ -116,26 +116,19 @@ export const EnterPassword = () => {
         />
       </Stack>
 
-      <Stack direction="row" justifyContent="space-between" mt={4}>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setCurrentStage(CreateWalletStage.MNEMONIC)
-          }}
-          disabled={isSubmitting}
-        >
-          Back
-        </Button>
-        <LoadingButton
-          variant="contained"
-          onClick={handleSubmit(onSubmit)}
-          loading={isSubmitting}
-          endIcon={<SendIcon />}
-          loadingPosition="end"
-        >
-          Create wallet
-        </LoadingButton>
-      </Stack>
+      <FlowNavigation
+        backButtonOptions={{
+          label: 'Back',
+          onClick: () => setCurrentStage(CreateWalletStage.MNEMONIC),
+          disabled: isSubmitting,
+        }}
+        nextButtonOptions={{
+          label: 'Create wallet',
+          onClick: handleSubmit(onSubmit),
+          isLoading: isSubmitting,
+          icon: <SendIcon />,
+        }}
+      />
 
       {errors.root && (
         <Alert severity="error" sx={{mt: 2}}>
