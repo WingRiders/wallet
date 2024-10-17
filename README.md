@@ -25,7 +25,7 @@ import { initDappPlugin } from "@wingriders/wallet-dapp-plugin";
 const connectWingRidersWallet = () => {
   initDappPlugin({
     gatewayUrl: "https://wallet.wingriders.com",
-    cabBackendUrlByNetwork: {
+    cabServerUrlByNetwork: {
       preprod: "https://cab-server.preprod.wingriders.com",
       mainnet: "https://cab-server.mainnet.wingriders.com",
     },

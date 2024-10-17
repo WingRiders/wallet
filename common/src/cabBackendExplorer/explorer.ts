@@ -19,18 +19,18 @@ import {parseOgmiosProtocolParameters} from '../protocolParameters'
 import {type UTxOResponse, parseUTxOResponse} from './parse'
 
 type CabBackendExplorerProps = {
-  url: string
+  cabServerUrl: string
   network: NetworkName
 }
 
 const MAX_ADDRESS_FOR_UTXOS = 10
 
 export class CabBackendExplorer implements IBlockchainExplorer {
-  private readonly url: string
+  private readonly cabServerUrl: string
   private readonly network: NetworkName
 
-  constructor({url, network}: CabBackendExplorerProps) {
-    this.url = url
+  constructor({cabServerUrl, network}: CabBackendExplorerProps) {
+    this.cabServerUrl = cabServerUrl
     this.network = network
   }
 
@@ -41,7 +41,7 @@ export class CabBackendExplorer implements IBlockchainExplorer {
 
     for (const addressesChunk of chunk(addresses, MAX_ADDRESS_FOR_UTXOS)) {
       const utxos: UTxOResponse[] = await fetch(
-        `${this.url}/utxos?addresses=${addressesChunk.join(',')}`,
+        `${this.cabServerUrl}/utxos?addresses=${addressesChunk.join(',')}`,
       ).then((res) => res.json())
       response.push(...utxos.map(parseUTxOResponse))
     }
@@ -55,7 +55,7 @@ export class CabBackendExplorer implements IBlockchainExplorer {
   }
 
   async submitTxRaw(_txHash: string, txBody: string): Promise<TxSubmission> {
-    const res = await fetch(`${this.url}/submitTx`, {
+    const res = await fetch(`${this.cabServerUrl}/submitTx`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ export class CabBackendExplorer implements IBlockchainExplorer {
     addresses: Array<BechAddress>,
   ): Promise<Set<BechAddress>> {
     const usedAddresses: {address: HexAddress; firstSlot: number}[] =
-      await fetch(`${this.url}/filterUsedAddresses`, {
+      await fetch(`${this.cabServerUrl}/filterUsedAddresses`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -95,8 +95,8 @@ export class CabBackendExplorer implements IBlockchainExplorer {
   }
 
   async getProtocolParameters(): Promise<ProtocolParameters> {
-    const res = await fetch(`${this.url}/protocolParameters`).then((res) =>
-      res.json(),
+    const res = await fetch(`${this.cabServerUrl}/protocolParameters`).then(
+      (res) => res.json(),
     )
     return makeNonNullable(parseOgmiosProtocolParameters(res))
   }

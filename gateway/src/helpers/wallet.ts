@@ -27,7 +27,7 @@ export const initWallet = async ({mnemonic, network}: InitWalletProps) => {
 
   const wallet = new Wallet({
     blockchainExplorer: new CabBackendExplorer({
-      url: cabServerUrlByNetwork[network],
+      cabServerUrl: cabServerUrlByNetwork[network],
       network,
     }),
     cryptoProvider,

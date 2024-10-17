@@ -11,7 +11,7 @@ export type InitDappPluginOptions = {
   /**
    * URL to the CAB backend server for each network.
    */
-  cabBackendUrlByNetwork: Record<NetworkName, string>
+  cabServerUrlByNetwork: Record<NetworkName, string>
 }
 
 export const initDappPlugin = (options: InitDappPluginOptions) => {
@@ -19,7 +19,7 @@ export const initDappPlugin = (options: InitDappPluginOptions) => {
     gateway: new WalletGateway({url: options.gatewayUrl}),
     getDataApi: (network) =>
       new DataApi({
-        cabBackendUrl: options.cabBackendUrlByNetwork[network],
+        cabServerUrl: options.cabServerUrlByNetwork[network],
         network,
       }),
     name: 'WingRiders',
