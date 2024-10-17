@@ -89,23 +89,23 @@ describe('Validation', () => {
       type: MessageType.SIGN_DATA_REQUEST,
       initId: '0',
       payload: {
-        addr: 'cafe',
-        sigStructure: 'cafe',
+        address: 'cafe',
+        payload: 'cafe',
       },
     }
     const invalid1 = {
       type: MessageType.SIGN_DATA_REQUEST,
       initId: '0',
       payload: {
-        addr: 'cafe',
+        address: 'cafe',
       },
     }
     const invalid2 = {
       type: MessageType.SIGN_DATA_REQUEST,
       initId: '0',
       payload: {
-        addr: 'cafe',
-        sigStructure: 'cafe',
+        address: 'cafe',
+        payload: 'cafe',
         additionalField: '0',
       },
     }
@@ -121,7 +121,10 @@ describe('Validation', () => {
       initId: '0',
       result: {
         isSuccess: true,
-        data: 'cafe',
+        data: {
+          signature: 'cafe',
+          key: 'cafe',
+        },
       },
     }
     const invalid1 = {
@@ -133,7 +136,10 @@ describe('Validation', () => {
       initId: '0',
       result: {
         isSuccess: true,
-        data: 'cafe',
+        data: {
+          signature: 'cafe',
+          key: 'cafe',
+        },
       },
       additionalField: '0',
     }

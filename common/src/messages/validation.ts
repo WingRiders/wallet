@@ -98,14 +98,19 @@ const messageSchema = z.discriminatedUnion('type', [
     type: z.literal(MessageType.SIGN_DATA_REQUEST),
     initId: z.string(),
     payload: z.strictObject({
-      addr: cborHexStringSchema,
-      sigStructure: cborHexStringSchema,
+      address: cborHexStringSchema,
+      payload: cborHexStringSchema,
     }),
   }),
   z.strictObject({
     type: z.literal(MessageType.SIGN_DATA_RESPONSE),
     initId: z.string(),
-    result: createResponseResult(hexStringSchema),
+    result: createResponseResult(
+      z.strictObject({
+        signature: hexStringSchema,
+        key: hexStringSchema,
+      }),
+    ),
   }),
 ])
 

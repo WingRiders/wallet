@@ -1,4 +1,8 @@
-import type {CborHexString, HexString} from '@wingriders/cab/dappConnector'
+import type {
+  CborHexString,
+  DataSignature,
+  HexString,
+} from '@wingriders/cab/dappConnector'
 
 import type {Address as BechAddress, UTxO} from '@wingriders/cab/types'
 import type {IDataApi} from '../../src/dataApi/types'
@@ -45,11 +49,14 @@ export const MOCKED_WALLET_GATEWAY: IWalletGateway = {
     return tx
   },
   async signData(
-    _addr: CborHexString,
-    _sigStructure: CborHexString,
-  ): Promise<HexString> {
+    _address: CborHexString,
+    _payload: CborHexString,
+  ): Promise<DataSignature> {
     // biome-ignore lint/suspicious/noConsole: <explanation>
     console.log('Data signed')
-    return '' as HexString
+    return {
+      key: '' as HexString,
+      signature: '' as HexString,
+    }
   },
 }
