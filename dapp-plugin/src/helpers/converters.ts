@@ -12,10 +12,10 @@ import type {
   UTxO,
 } from '@wingriders/cab/types'
 import {encode} from 'borc'
-import {utxoToDecodeUtxo, valueToDecodedValue} from '../walletCborApi/parsers'
+import {utxoToDecodedUtxo, valueToDecodedValue} from '../walletCborApi/parsers'
 
 export const utxoToWalletCbor = (utxo: UTxO): CborHexString =>
-  encode(utxoToDecodeUtxo(utxo)).toString('hex') as CborHexString
+  encode(utxoToDecodedUtxo(utxo)).toString('hex') as CborHexString
 
 export const hexAddressToWalletCbor = (addresses: HexAddress): CborHexString =>
   addresses as string as CborHexString
