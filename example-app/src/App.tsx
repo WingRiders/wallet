@@ -144,7 +144,7 @@ export const App = () => {
   }
 
   return (
-    <Stack alignItems="flex-start" spacing={4} p={3}>
+    <Stack alignItems="flex-start" spacing={2} p={3}>
       <LoadingButton
         variant={walletData?.jsApi ? 'outlined' : 'contained'}
         onClick={
@@ -157,21 +157,6 @@ export const App = () => {
 
       {walletData && (
         <Stack alignItems="flex-start" spacing={2}>
-          <Section title="ADA balance">
-            <Typography variant="body1">
-              {walletData.lovelaceBalance.shiftedBy(-ADA_DECIMALS).toFormat()}{' '}
-              ADA
-            </Typography>
-          </Section>
-
-          <Section title="Network">
-            <Typography variant="body1">{walletData.networkName}</Typography>
-          </Section>
-
-          <Section title="Address">
-            <Typography variant="body1">{walletData.address}</Typography>
-          </Section>
-
           <LoadingButton
             onClick={handleCreateExampleTransaction}
             variant="contained"
@@ -188,6 +173,21 @@ export const App = () => {
               {exampleTxResult.message}
             </Alert>
           )}
+
+          <Section title="ADA balance">
+            <Typography variant="body1">
+              {walletData.lovelaceBalance.shiftedBy(-ADA_DECIMALS).toFormat()}{' '}
+              ADA
+            </Typography>
+          </Section>
+
+          <Section title="Network">
+            <Typography variant="body1">{walletData.networkName}</Typography>
+          </Section>
+
+          <Section title="Address">
+            <Typography variant="body1">{walletData.address}</Typography>
+          </Section>
 
           <Section title="UTxOs">
             <Stack spacing={2}>
