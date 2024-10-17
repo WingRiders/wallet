@@ -4,21 +4,21 @@ import {CborToJsApiBridge, reverseUtxos} from '@wingriders/cab/wallet/connector'
 
 import {injectCborApi} from '../../src/init/inject'
 
+import {NETWORK_NAME_TO_API_NETWORK_ID} from '../../src/constants'
 import {MOCKED_DATA_API, MOCKED_WALLET_GATEWAY} from '../mocks/apis'
 import {
-  MOCKED_USED_ADDRESSES,
+  MOCKED_CHANGE_ADDRESS,
+  MOCKED_COLLATERAL_UTXO_REF,
+  MOCKED_NETWORK,
+  MOCKED_REWARD_ADDRESSES,
   MOCKED_UNUSED_ADDRESSES,
+  MOCKED_USED_ADDRESSES,
   MOCKED_UTXOS,
   MOCKED_VALUE,
-  MOCKED_COLLATERAL_UTXOS,
-  MOCKED_NETWORK,
-  MOCKED_CHANGE_ADDRESS,
-  MOCKED_REWARD_ADDRESSES,
+  MOCKED_WALLET_ICON,
   MOCKED_WALLET_NAME,
   MOCKED_WALLET_VERSION,
-  MOCKED_WALLET_ICON,
 } from '../mocks/values'
-import {NETWORK_NAME_TO_API_NETWORK_ID} from '../../src/constants'
 
 declare const window: typeof globalThis.window & {
   cardano?: {
@@ -62,6 +62,12 @@ describe('inject', () => {
     expect(rewardAddresses).toEqual(MOCKED_REWARD_ADDRESSES)
     expect(utxos).toEqual(MOCKED_UTXOS)
     expect(balance).toEqual(MOCKED_VALUE)
-    expect(collateralUtxos).toEqual(MOCKED_COLLATERAL_UTXOS)
+    expect(collateralUtxos).toEqual([
+      MOCKED_UTXOS.find(
+        (utxo) =>
+          utxo.txHash === MOCKED_COLLATERAL_UTXO_REF.txHash &&
+          utxo.outputIndex === MOCKED_COLLATERAL_UTXO_REF.outputIndex,
+      )!,
+    ])
   })
 })

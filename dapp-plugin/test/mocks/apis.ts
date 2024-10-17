@@ -6,7 +6,7 @@ import type {IWalletGateway} from '../../src/gateway/types'
 
 import {
   MOCKED_CHANGE_ADDRESS,
-  MOCKED_COLLATERAL_UTXOS,
+  MOCKED_COLLATERAL_UTXO_REF,
   MOCKED_NETWORK,
   MOCKED_REWARD_ADDRESSES,
   MOCKED_UNUSED_ADDRESSES,
@@ -33,7 +33,7 @@ export const MOCKED_WALLET_GATEWAY: IWalletGateway = {
       unusedAddresses: MOCKED_UNUSED_ADDRESSES,
       changeAddress: MOCKED_CHANGE_ADDRESS,
       rewardAddresses: MOCKED_REWARD_ADDRESSES,
-      collateralUtxos: MOCKED_COLLATERAL_UTXOS,
+      collateralUtxoRef: MOCKED_COLLATERAL_UTXO_REF,
     }
   },
   async signTx(
