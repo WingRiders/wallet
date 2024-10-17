@@ -1,13 +1,24 @@
-import {MessageType, isValidMessage} from '@wingriders/wallet-common'
+import {
+  type ConcreteMessage,
+  MessageType,
+  isValidMessage,
+} from '@wingriders/wallet-common'
 import {useEffect} from 'react'
+import {useShallow} from 'zustand/shallow'
 import {useMessagesStore} from '../store/messages'
+import {getResponseMessageType} from './response'
 
 type MessageListenerProps = {
   children?: React.ReactNode
 }
 
 export const MessageListener = ({children}: MessageListenerProps) => {
-  const setPendingMessage = useMessagesStore((s) => s.setPendingMessage)
+  const {pendingMessage, setPendingMessage} = useMessagesStore(
+    useShallow(({pendingMessage, setPendingMessage}) => ({
+      pendingMessage,
+      setPendingMessage,
+    })),
+  )
 
   useEffect(() => {
     const handleEvent = (event: MessageEvent) => {
@@ -35,6 +46,32 @@ export const MessageListener = ({children}: MessageListenerProps) => {
       window.removeEventListener('message', handleEvent)
     }
   }, [setPendingMessage])
+
+  // resolve pending message when user closes the window
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (pendingMessage) {
+        const responseMessageType = getResponseMessageType(
+          pendingMessage.message.type,
+        )
+
+        const responseMessage: ConcreteMessage<typeof responseMessageType> = {
+          type: responseMessageType,
+          initId: pendingMessage.message.initId,
+          result: {isSuccess: false, errorMessage: 'User closed the window'},
+        }
+
+        pendingMessage.eventSource.postMessage(responseMessage, {
+          targetOrigin: pendingMessage.origin,
+        })
+      }
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [pendingMessage])
 
   return <>{children}</>
 }
