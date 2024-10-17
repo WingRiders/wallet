@@ -20,22 +20,21 @@ npm install @wingriders/wallet-dapp-plugin
 2. Initialize the plugin:
 
 ```ts
-import { initDappPlugin } from "@wingriders/wallet-dapp-plugin";
+import { initDappPlugin, WalletInitMode } from "@wingriders/wallet-dapp-plugin";
 
 const connectWingRidersWallet = () => {
   initDappPlugin({
+    mode: WalletInitMode.SINGLE_NETWORK,
+    network: "preprod",
+    cabServerUrl: "https://cab-server.preprod.wingriders.com",
     gatewayUrl: "https://wallet.wingriders.com",
-    cabServerUrlByNetwork: {
-      preprod: "https://cab-server.preprod.wingriders.com",
-      mainnet: "https://cab-server.mainnet.wingriders.com",
-    },
   });
 
   const wallet = window.cardano.wrWallet; // follows the CIP-0030 Wallet API
 };
 ```
 
-3. Use the injected wallet API:
+1. Use the injected wallet API:
 
 After injecting the wallet API, you can use it just as any another Cardano wallet according to the [CIP-30](https://cips.cardano.org/cip/CIP-30) standard:
 
