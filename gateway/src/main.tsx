@@ -7,12 +7,12 @@ import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
+import {ApolloProvider} from '@apollo/client'
 import {CssBaseline, ThemeProvider} from '@mui/material'
+import {client} from './graphql/client'
 import {useCreatedWalletStore} from './store/createdWallet'
 import {useWalletDataStore} from './store/walletData'
 import {theme} from './theme'
-import {ApolloProvider} from '@apollo/client'
-import {client} from './graphql/client'
 
 const router = createRouter({
   routeTree,
