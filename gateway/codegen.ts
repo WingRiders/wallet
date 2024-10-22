@@ -3,7 +3,7 @@ import type {CodegenConfig} from '@graphql-codegen/cli'
 const config: CodegenConfig = {
   overwrite: true,
   schema: {
-    [`${process.env.VITE_API_SERVER_URL_PREPROD || 'https://api.preprod.wingriders.com'}/graphql`]:
+    [`${process.env.VITE_API_SERVER_URL_PREPROD || 'https://api.mainnet.wingriders.com'}/graphql`]:
       {
         headers: {
           'user-agent': 'graphql-codegen',
