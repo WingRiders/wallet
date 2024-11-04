@@ -8,6 +8,7 @@ const configSchema = z.object({
   API_SERVER_PUBLIC_URL_MAINNET: z.string(),
   CAB_SERVER_PUBLIC_URL_PREPROD: z.string(),
   CAB_SERVER_PUBLIC_URL_MAINNET: z.string(),
+  NETWORK: z.enum(['preprod', 'mainnet']).optional(),
 })
 
 type ConfigType = {
@@ -18,6 +19,7 @@ type ConfigType = {
   API_SERVER_PUBLIC_URL_MAINNET: string
   CAB_SERVER_PUBLIC_URL_PREPROD: string
   CAB_SERVER_PUBLIC_URL_MAINNET: string
+  NETWORK?: 'preprod' | 'mainnet'
 }
 
 const loadConfig = () => {
@@ -32,6 +34,7 @@ const loadConfig = () => {
     API_SERVER_PUBLIC_URL_MAINNET: env.API_SERVER_PUBLIC_URL_MAINNET,
     CAB_SERVER_PUBLIC_URL_PREPROD: env.CAB_SERVER_PUBLIC_URL_PREPROD,
     CAB_SERVER_PUBLIC_URL_MAINNET: env.CAB_SERVER_PUBLIC_URL_MAINNET,
+    NETWORK: env.NETWORK,
   }
   return config
 }
@@ -43,6 +46,7 @@ export const appConfig = {
   API_SERVER_URL_MAINNET: config.API_SERVER_PUBLIC_URL_MAINNET,
   CAB_SERVER_URL_PREPROD: config.CAB_SERVER_PUBLIC_URL_PREPROD,
   CAB_SERVER_URL_MAINNET: config.CAB_SERVER_PUBLIC_URL_MAINNET,
+  NETWORK: config.NETWORK,
 }
 
 export const isProd = process.env.NODE_ENV === 'production'
