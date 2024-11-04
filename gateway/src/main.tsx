@@ -12,6 +12,7 @@ import {CssBaseline, ThemeProvider} from '@mui/material'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import {AppBackground} from './components/AppBackground'
 import {client} from './graphql/client'
+import {useSyncConfigAndStoreNetwork} from './helpers/network'
 import {MessageListener} from './messages/MessageListener'
 import {useCreatedWalletStore} from './store/createdWallet'
 import {selectIsLogin, useWalletDataStore} from './store/walletData'
@@ -29,6 +30,7 @@ declare module '@tanstack/react-router' {
 }
 
 const RouterWithContext = () => {
+  useSyncConfigAndStoreNetwork()
   const hasCreatedWallet = useCreatedWalletStore((s) => s.createdWallet != null)
   const isLogin = useWalletDataStore(selectIsLogin)
 

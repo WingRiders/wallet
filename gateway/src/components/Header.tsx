@@ -11,6 +11,7 @@ import {
 import {useNavigate} from '@tanstack/react-router'
 import {NetworkName} from '@wingriders/cab/types'
 import {useShallow} from 'zustand/shallow'
+import {config} from '../config'
 import {useCreatedWalletStore} from '../store/createdWallet'
 import {useWalletDataStore} from '../store/walletData'
 
@@ -37,23 +38,27 @@ export const Header = ({showWalletActions = true}: HeaderProps) => {
         <Typography variant="h6">WingRiders Wallet</Typography>
 
         <Stack direction="row" alignItems="center" spacing={2}>
-          <FormControl sx={{minWidth: '120px'}}>
-            <InputLabel id="network-select-label">Network</InputLabel>
-            <Select
-              labelId="network-select-label"
-              value={network}
-              label="Network"
-              size="small"
-              onChange={(e) => {
-                setNetwork(e.target.value as NetworkName)
-                clearWalletData()
-                navigate({to: '/auth/login', replace: true})
-              }}
-            >
-              <MenuItem value={NetworkName.PREPROD}>Preprod</MenuItem>
-              <MenuItem value={NetworkName.MAINNET}>Mainnet</MenuItem>
-            </Select>
-          </FormControl>
+          {config.NETWORK ? (
+            <Typography>Network: {config.NETWORK}</Typography>
+          ) : (
+            <FormControl sx={{minWidth: '120px'}}>
+              <InputLabel id="network-select-label">Network</InputLabel>
+              <Select
+                labelId="network-select-label"
+                value={network}
+                label="Network"
+                size="small"
+                onChange={(e) => {
+                  setNetwork(e.target.value as NetworkName)
+                  clearWalletData()
+                  navigate({to: '/auth/login', replace: true})
+                }}
+              >
+                <MenuItem value={NetworkName.PREPROD}>Preprod</MenuItem>
+                <MenuItem value={NetworkName.MAINNET}>Mainnet</MenuItem>
+              </Select>
+            </FormControl>
+          )}
 
           {showWalletActions && (
             <Stack direction="row" alignItems="center" spacing={2}>

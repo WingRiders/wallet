@@ -6,6 +6,7 @@ const configSchema = z.object({
   API_SERVER_URL_MAINNET: z.string(),
   CAB_SERVER_URL_PREPROD: z.string(),
   CAB_SERVER_URL_MAINNET: z.string(),
+  NETWORK: z.nativeEnum(NetworkName).optional(),
 })
 
 const loadConfig = () => {
@@ -15,6 +16,7 @@ const loadConfig = () => {
       API_SERVER_URL_MAINNET: import.meta.env.VITE_API_SERVER_URL_MAINNET,
       CAB_SERVER_URL_PREPROD: import.meta.env.VITE_CAB_SERVER_URL_PREPROD,
       CAB_SERVER_URL_MAINNET: import.meta.env.VITE_CAB_SERVER_URL_MAINNET,
+      NETWORK: import.meta.env.VITE_NETWORK,
     })
   }
 
