@@ -8,7 +8,7 @@ const configSchema = z.object({
   API_SERVER_PUBLIC_URL_MAINNET: z.string(),
   CAB_SERVER_PUBLIC_URL_PREPROD: z.string(),
   CAB_SERVER_PUBLIC_URL_MAINNET: z.string(),
-  NETWORK: z.enum(['preprod', 'mainnet']).optional(),
+  NETWORK: z.enum(['preprod', 'mainnet', '-1']).optional(), // -1 means not set
 })
 
 type ConfigType = {
@@ -34,7 +34,7 @@ const loadConfig = () => {
     API_SERVER_PUBLIC_URL_MAINNET: env.API_SERVER_PUBLIC_URL_MAINNET,
     CAB_SERVER_PUBLIC_URL_PREPROD: env.CAB_SERVER_PUBLIC_URL_PREPROD,
     CAB_SERVER_PUBLIC_URL_MAINNET: env.CAB_SERVER_PUBLIC_URL_MAINNET,
-    NETWORK: env.NETWORK,
+    NETWORK: env.NETWORK && env.NETWORK !== '-1' ? env.NETWORK : undefined,
   }
   return config
 }
