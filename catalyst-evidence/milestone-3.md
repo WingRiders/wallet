@@ -10,11 +10,7 @@ This guide shows how to verify the communication between a dApp and the WingRide
 
 Visit https://wallet.wingriders.com.
 
-First, change the network to PREPROD and enter your mnemonic. We've prepared a testing wallet that you can use:
-
-```
-run short fit drop trigger verify pulse hazard inhale car average priority quantum merry agree
-```
+Either restore your existing wallet or create a new one. This wallet should have some funds if you want to test the transactions.
 
 After that, enter a new password and create the wallet.
 
