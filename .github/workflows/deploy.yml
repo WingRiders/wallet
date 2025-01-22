@@ -165,14 +165,14 @@ jobs:
 
       - name: Deploy Amazon ECS task definition
         if: ${{ inputs.deploy != true }}
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           cluster: ${{ env.ECS_CLUSTER }}
 
       - name: Update ECS service with the new task definition
         if: ${{ inputs.deploy == true }}
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: ${{ matrix.service }}
