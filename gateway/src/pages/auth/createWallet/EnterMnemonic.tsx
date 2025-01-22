@@ -1,9 +1,12 @@
-import {Box, TextField} from '@mui/material'
+import {Box} from '@mui/material'
 import {validateMnemonic as isMnemonicValid} from '@wingriders/cab/crypto'
 import {type SubmitHandler, useForm} from 'react-hook-form'
 import {useShallow} from 'zustand/shallow'
 import {FlowNavigation} from '../../../components/FlowNavigation'
-import {getTextFieldErrorFields} from '../../../helpers/forms'
+import {FormField} from '../../../components/FormField'
+import {InputField} from '../../../components/InputField'
+import {Paragraph} from '../../../components/Typography/Paragraph'
+import {getErrorMessage} from '../../../helpers/forms'
 import {useCreateWalletStore} from '../../../store/createWallet'
 
 type Inputs = {
@@ -34,25 +37,33 @@ export const EnterMnemonic = () => {
   })
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    submitMnemonic(data.mnemonic)
+    submitMnemonic(data.mnemonic, false)
   }
 
   return (
     <Box>
-      <TextField
-        {...register('mnemonic', {
-          required: true,
-          validate: (value) => {
-            if (!isMnemonicValid(value)) return 'Invalid mnemonic'
-            return undefined
-          },
-        })}
-        label="Mnemonic"
-        fullWidth
-        variant="filled"
-        multiline
-        {...getTextFieldErrorFields(errors.mnemonic)}
-      />
+      <Paragraph variant="large" mb={5}>
+        Paste your existing 15-word or 24-word mnemonic phrase to restore your
+        wallet.
+      </Paragraph>
+
+      <FormField label="Mnemonic" error={getErrorMessage(errors.mnemonic)}>
+        <InputField
+          {...register('mnemonic', {
+            required: true,
+            validate: (value) => {
+              const words = value.split(' ')
+              if (words.length !== 15 && words.length !== 24) {
+                return 'Invalid mnemonic length, only 15 or 24 words are supported'
+              }
+              if (!isMnemonicValid(value)) return 'Invalid mnemonic'
+              return undefined
+            },
+          })}
+          placeholder="Enter your mnemonic phrase"
+          multiline
+        />
+      </FormField>
 
       <FlowNavigation
         backButtonOptions={{

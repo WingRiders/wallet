@@ -1,5 +1,6 @@
-import {LoadingButton} from '@mui/lab'
-import {Button, Stack, Typography} from '@mui/material'
+import {Stack, Typography} from '@mui/material'
+import {Button} from '../../components/Buttons/Button'
+import {TextButton} from '../../components/Buttons/TextButton'
 import type {MessageDisplayProps} from './types'
 
 type MessageDisplayParentProps = Pick<
@@ -34,19 +35,22 @@ export const MessageDisplayParent = ({
         spacing={1}
         mt={5}
       >
-        <LoadingButton
+        <Button
           onClick={onAllow}
-          variant="contained"
           sx={{mt: 2}}
-          loading={isLoading}
-          disabled={disabled}
+          loading={isLoading && 'centered'}
+          disabled={disabled || isLoading}
           fullWidth
         >
           {allowText ?? 'Allow'}
-        </LoadingButton>
-        <Button onClick={onReject} disabled={isLoading || disabled} fullWidth>
-          Reject
         </Button>
+        <TextButton
+          onClick={onReject}
+          disabled={isLoading || disabled}
+          fullWidth
+        >
+          Reject
+        </TextButton>
       </Stack>
     </Stack>
   )

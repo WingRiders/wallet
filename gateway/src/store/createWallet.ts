@@ -8,6 +8,7 @@ export enum CreateWalletOption {
 export enum CreateWalletStage {
   CHOOSE_OPTION = 'CHOOSE_OPTION',
   MNEMONIC = 'MNEMONIC',
+  CONFIRM_GENERATED_MNEMONIC = 'CONFIRM_GENERATED_MNEMONIC',
   PASSWORD = 'PASSWORD',
 }
 
@@ -19,7 +20,8 @@ export type CreateWalletState = {
   startFlow: (option: CreateWalletOption) => void
 
   mnemonic?: string
-  submitMnemonic: (mnemonic: string) => void
+  submitMnemonic: (mnemonic: string, needsConfirm: boolean) => void
+  confirmMnemonic: () => void
 
   reset: () => void
 }
@@ -37,8 +39,14 @@ export const useCreateWalletStore = create<CreateWalletState>((set) => ({
     }),
 
   mnemonic: undefined,
-  submitMnemonic: (mnemonic) =>
-    set({mnemonic, currentStage: CreateWalletStage.PASSWORD}),
+  submitMnemonic: (mnemonic, needsConfirm) =>
+    set({
+      mnemonic,
+      currentStage: needsConfirm
+        ? CreateWalletStage.CONFIRM_GENERATED_MNEMONIC
+        : CreateWalletStage.PASSWORD,
+    }),
+  confirmMnemonic: () => set({currentStage: CreateWalletStage.PASSWORD}),
 
   reset: () =>
     set({

@@ -1,12 +1,16 @@
 import LoginIcon from '@mui/icons-material/Login'
-import {LoadingButton} from '@mui/lab'
-import {Alert, Button, Stack, TextField, Typography} from '@mui/material'
+import {Alert, Stack} from '@mui/material'
 import {useNavigate} from '@tanstack/react-router'
 import {type SubmitHandler, useForm} from 'react-hook-form'
 import {useShallow} from 'zustand/shallow'
+import {Button} from '../../components/Buttons/Button'
+import {TextButton} from '../../components/Buttons/TextButton'
+import {FormField} from '../../components/FormField'
+import {InputField} from '../../components/InputField'
 import {Page} from '../../components/Page'
+import {Paper} from '../../components/Paper'
 import {decryptData} from '../../helpers/encryption'
-import {getTextFieldErrorFields} from '../../helpers/forms'
+import {getErrorMessage} from '../../helpers/forms'
 import {getWalletData, initWallet} from '../../helpers/wallet'
 import {useCreatedWalletStore} from '../../store/createdWallet'
 import {useWalletDataStore} from '../../store/walletData'
@@ -18,10 +22,16 @@ type Inputs = {
 export const LoginPage = () => {
   const navigate = useNavigate()
 
-  const {createdWallet, network} = useCreatedWalletStore(
-    useShallow(({createdWallet, network}) => ({createdWallet, network})),
+  const {createdWallet, setCreatedWallet, network} = useCreatedWalletStore(
+    useShallow(({createdWallet, setCreatedWallet, network}) => ({
+      createdWallet,
+      setCreatedWallet,
+      network,
+    })),
   )
-  const setWalletData = useWalletDataStore((s) => s.setWalletData)
+  const {setWalletData, clear: clearWalletData} = useWalletDataStore(
+    useShallow(({setWalletData, clear}) => ({setWalletData, clear})),
+  )
 
   const {
     register,
@@ -69,50 +79,50 @@ export const LoginPage = () => {
   }
 
   return (
-    <Page showHeader headerProps={{showWalletActions: false}}>
-      <Typography variant="h3">Login</Typography>
+    <Page showHeader headerProps={{showNetwork: true}}>
+      <Paper title="Login">
+        <FormField label="Password" error={getErrorMessage(errors.password)}>
+          <InputField
+            {...register('password', {
+              required: true,
+            })}
+            type="password"
+            colorVariant="paper"
+            placeholder="Enter your password"
+            disabled={isSubmitting}
+          />
+        </FormField>
 
-      <Typography mt={4} mb={3} variant="h5">
-        Enter your password
-      </Typography>
+        <Stack mt={4} alignItems="center" spacing={3}>
+          <Button
+            color="primary"
+            onClick={handleSubmit(onSubmit)}
+            loading={isSubmitting && 'centered'}
+            disabled={isSubmitting}
+            icon={<LoginIcon fontSize="small" />}
+            sx={{width: '20%', maxWidth: '300px'}}
+          >
+            Login
+          </Button>
 
-      <TextField
-        {...register('password', {
-          required: true,
-        })}
-        label="Password"
-        type="password"
-        variant="filled"
-        fullWidth
-        disabled={isSubmitting}
-        {...getTextFieldErrorFields(errors.password)}
-      />
+          <TextButton
+            onClick={() => {
+              setCreatedWallet(null)
+              clearWalletData()
+              return navigate({to: '/auth/create-wallet'})
+            }}
+            disabled={isSubmitting}
+          >
+            Create new wallet
+          </TextButton>
+        </Stack>
 
-      <Stack mt={4} alignItems="center" spacing={3}>
-        <LoadingButton
-          variant="contained"
-          onClick={handleSubmit(onSubmit)}
-          loading={isSubmitting}
-          endIcon={<LoginIcon />}
-          loadingPosition="end"
-          sx={{width: '20%', maxWidth: '300px'}}
-        >
-          Login
-        </LoadingButton>
-
-        <Button
-          variant="text"
-          onClick={() => navigate({to: '/auth/create-wallet'})}
-        >
-          Create new wallet
-        </Button>
-      </Stack>
-
-      {errors.root && (
-        <Alert severity="error" sx={{mt: 2}}>
-          {errors.root.message || 'Login failed'}
-        </Alert>
-      )}
+        {errors.root && (
+          <Alert severity="error" sx={{mt: 2}}>
+            {errors.root.message || 'Login failed'}
+          </Alert>
+        )}
+      </Paper>
     </Page>
   )
 }

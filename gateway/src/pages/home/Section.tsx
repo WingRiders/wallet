@@ -1,5 +1,6 @@
-import {Box, Stack, Typography} from '@mui/material'
+import {Box, Stack} from '@mui/material'
 import type {ReactNode} from 'react'
+import {Label} from '../../components/Typography/Label'
 
 type SectionProps = {
   title?: string
@@ -8,9 +9,9 @@ type SectionProps = {
 
 export const Section = ({title, children}: SectionProps) => {
   return (
-    <Stack spacing={1}>
-      {title && <Typography variant="body1">{title}</Typography>}
-      <Box bgcolor={({palette}) => palette.background.paper} p={3}>
+    <Stack spacing={2}>
+      {title && <Label variant="large">{title}</Label>}
+      <Box bgcolor={({palette}) => palette.background.paper} p={5}>
         {children}
       </Box>
     </Stack>

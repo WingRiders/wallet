@@ -40,6 +40,9 @@
           "options": {
             "allow": ["warn", "error"]
           }
+        },
+        "noArrayIndexKey": {
+          "level": "off"
         }
       },
       "complexity": {

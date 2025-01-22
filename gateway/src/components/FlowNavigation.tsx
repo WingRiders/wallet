@@ -1,6 +1,7 @@
-import {LoadingButton} from '@mui/lab'
-import {Button, Stack} from '@mui/material'
+import {Stack} from '@mui/material'
 import type {ReactNode} from 'react'
+import {Button} from './Buttons/Button'
+import {TextButton} from './Buttons/TextButton'
 
 type FlowButtonOptions = {
   label: string
@@ -19,29 +20,26 @@ export const FlowNavigation = ({
   backButtonOptions,
 }: FlowNavigationProps) => {
   return (
-    <Stack direction="row" justifyContent="space-between" mt={4}>
+    <Stack direction="row" justifyContent="space-between" mt={10}>
       {backButtonOptions && (
-        <Button
-          variant="outlined"
+        <TextButton
           onClick={backButtonOptions.onClick}
           disabled={backButtonOptions.disabled || backButtonOptions.isLoading}
-          endIcon={backButtonOptions.icon}
+          icon={backButtonOptions.icon}
         >
           {backButtonOptions.label}
-        </Button>
+        </TextButton>
       )}
 
       {nextButtonOptions && (
-        <LoadingButton
-          variant="contained"
+        <Button
           onClick={nextButtonOptions.onClick}
-          loading={nextButtonOptions.isLoading}
-          endIcon={nextButtonOptions.icon}
+          loading={nextButtonOptions.isLoading && 'centered'}
+          icon={nextButtonOptions.icon}
           disabled={nextButtonOptions.disabled || nextButtonOptions.isLoading}
-          loadingPosition="end"
         >
           {nextButtonOptions.label}
-        </LoadingButton>
+        </Button>
       )}
     </Stack>
   )

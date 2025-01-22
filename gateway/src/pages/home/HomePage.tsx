@@ -1,22 +1,22 @@
 import {useQuery} from '@apollo/client'
-import {Grid2, Stack, Typography} from '@mui/material'
+import {Box, Grid2, Stack} from '@mui/material'
 import {AdaAsset} from '@wingriders/cab/constants'
 import {assetId} from '@wingriders/cab/helpers'
 import {tokenToAsset} from '@wingriders/cab/ledger/assets'
-import {useShallow} from 'zustand/shallow'
-import {CollateralPanel} from '../../collateral/CollateralPanel'
 import {AssetQuantityDisplay} from '../../components/AssetQuantityDisplay'
+import {Button} from '../../components/Buttons/Button'
 import {Page} from '../../components/Page'
+import {Paper} from '../../components/Paper'
+import {TokenDisplay} from '../../components/TokenDisplay'
+import {Heading} from '../../components/Typography/Heading'
+import {Label} from '../../components/Typography/Label'
 import {assetsMetadataQuery} from '../../metadata/queries'
 import {useWalletDataStore} from '../../store/walletData'
 import {Section} from './Section'
 import {useWalletValue} from './helpers'
 
 export const HomePage = () => {
-  const {addresses, utxos} = useWalletDataStore(
-    useShallow(({addresses, utxos}) => ({addresses, utxos})),
-  )
-
+  const utxos = useWalletDataStore(({utxos}) => utxos)
   const walletValue = useWalletValue(utxos)
 
   // prefetch metadata of all assets in the wallet
@@ -27,42 +27,52 @@ export const HomePage = () => {
   })
 
   return (
-    <Page showHeader>
-      <Typography variant="h3">Your wallet overview</Typography>
+    <Page showHeader headerProps={{showWallet: true}}>
+      <Paper
+        title="Your wallet"
+        topRightButton={
+          <Box>
+            <Button
+              size="small"
+              color="secondary"
+              anchor
+              href="https://app.wingriders.com/swap"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Swap
+            </Button>
+          </Box>
+        }
+      >
+        {walletValue && (
+          <Stack spacing={3} mt={2}>
+            <Section>
+              <Heading variant="h1">
+                <AssetQuantityDisplay
+                  token={{...AdaAsset, quantity: walletValue.coins}}
+                />
+              </Heading>
+            </Section>
 
-      {walletValue && addresses && (
-        <Stack spacing={3} mt={2}>
-          <Section>
-            <Typography variant="h4">
-              <AssetQuantityDisplay
-                token={{...AdaAsset, quantity: walletValue.coins}}
-              />
-            </Typography>
-          </Section>
-
-          <Section title="Address">
-            <Typography variant="body1">
-              {addresses.usedAddresses[0] ?? addresses.unusedAddresses[0]}
-            </Typography>
-          </Section>
-
-          <Section title="Collateral">
-            <CollateralPanel />
-          </Section>
-
-          <Section title="Tokens">
-            <Grid2 container>
-              {walletValue.tokenBundle
-                .sort((a, b) => b.quantity.comparedTo(a.quantity))
-                .map((token) => (
-                  <Grid2 size={4} key={assetId(token)}>
-                    <AssetQuantityDisplay token={token} />
-                  </Grid2>
-                ))}
-            </Grid2>
-          </Section>
-        </Stack>
-      )}
+            <Section title="Tokens">
+              {walletValue.tokenBundle.length === 0 ? (
+                <Label variant="large">No tokens</Label>
+              ) : (
+                <Grid2 container spacing={2}>
+                  {walletValue.tokenBundle
+                    .sort((a, b) => b.quantity.comparedTo(a.quantity))
+                    .map((token) => (
+                      <Grid2 size={{xs: 12, sm: 6, md: 4}} key={assetId(token)}>
+                        <TokenDisplay token={token} />
+                      </Grid2>
+                    ))}
+                </Grid2>
+              )}
+            </Section>
+          </Stack>
+        )}
+      </Paper>
     </Page>
   )
 }
