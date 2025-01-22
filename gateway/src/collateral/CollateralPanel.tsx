@@ -16,7 +16,7 @@ export const CollateralPanel = () => {
         <Label
           variant="large"
           sx={({palette}) => ({
-            color: collateral ? palette.success.main : palette.error.main,
+            color: collateral ? palette.success.main : palette.warning.main,
           })}
         >
           {collateral ? 'Collateral set' : 'Collateral not set'}
