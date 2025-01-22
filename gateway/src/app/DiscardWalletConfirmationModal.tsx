@@ -14,8 +14,8 @@ export const DiscardWalletConfirmationModal = ({
 }: DiscardWalletConfirmationModalProps) => {
   const navigate = useNavigate()
   const clearWalletData = useWalletDataStore(({clear}) => clear)
-  const setCreatedWallet = useCreatedWalletStore(
-    ({setCreatedWallet}) => setCreatedWallet,
+  const clearCreatedWallet = useCreatedWalletStore(
+    ({clearCreatedWallet}) => clearCreatedWallet,
   )
 
   return (
@@ -31,7 +31,7 @@ export const DiscardWalletConfirmationModal = ({
         <Stack spacing={2}>
           <Button
             onClick={() => {
-              setCreatedWallet(null)
+              clearCreatedWallet()
               clearWalletData()
               navigate({to: '/auth/create-wallet', replace: true})
             }}

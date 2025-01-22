@@ -13,6 +13,7 @@ import {WithClipboard} from '../components/WithClipboard'
 import {CardanoscanLinks} from '../helpers/explorerLinks'
 import {useCreatedWalletStore} from '../store/createdWallet'
 import {useWalletDataStore} from '../store/walletData'
+import {AllowedOrigins} from './AllowedOrigins'
 import {DiscardWalletConfirmationModal} from './DiscardWalletConfirmationModal'
 
 type AccountModalProps = Pick<ModalProps, 'open' | 'onClose'>
@@ -95,6 +96,12 @@ export const AccountModal = ({open, onClose}: AccountModalProps) => {
                 </Box>
               )}
             />
+          </FormField>
+
+          <FormField label="Connected dApps">
+            <Box bgcolor={({palette}) => palette.background.paper} p={4}>
+              <AllowedOrigins />
+            </Box>
           </FormField>
 
           <Stack

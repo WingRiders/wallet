@@ -5,6 +5,7 @@ import {
 } from '@wingriders/wallet-common'
 import {useEffect} from 'react'
 import {useShallow} from 'zustand/shallow'
+import {useCreatedWalletStore} from '../store/createdWallet'
 import {useMessagesStore} from '../store/messages'
 import {getDeclinedErrorCode, getResponseMessageType} from './response'
 
@@ -19,6 +20,7 @@ export const MessageListener = ({children}: MessageListenerProps) => {
       setPendingMessage,
     })),
   )
+  const allowedOrigins = useCreatedWalletStore((s) => s.allowedOrigins)
 
   useEffect(() => {
     const handleEvent = (event: MessageEvent) => {
@@ -31,6 +33,25 @@ export const MessageListener = ({children}: MessageListenerProps) => {
       )
         return
 
+      // if it's not an init request, check if the origin is allowed
+      if (
+        message.type !== MessageType.INIT_REQUEST &&
+        !allowedOrigins.includes(event.origin)
+      ) {
+        const responseMessageType = getResponseMessageType(message.type)
+
+        const responseMessage: ConcreteMessage<typeof responseMessageType> = {
+          type: responseMessageType,
+          initId: message.initId,
+          result: {isSuccess: false, error: {info: 'Origin not allowed'}},
+        }
+
+        event.source.postMessage(responseMessage, {
+          targetOrigin: event.origin,
+        })
+        window.close()
+        return
+      }
       setPendingMessage({
         message,
         eventSource: event.source,
@@ -45,7 +66,7 @@ export const MessageListener = ({children}: MessageListenerProps) => {
     return () => {
       window.removeEventListener('message', handleEvent)
     }
-  }, [setPendingMessage])
+  }, [setPendingMessage, allowedOrigins])
 
   // resolve pending message when user closes the window
   useEffect(() => {
