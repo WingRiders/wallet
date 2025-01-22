@@ -15,7 +15,7 @@ When you first visit the application, you will be prompted to create a wallet:
 You have two options:
 
 1. **Create a new wallet**: The application will generate a new mnemonic, and a brand new wallet will be created.
-2. **Import an existing wallet**: Choose this option if you already have a mnemonic for an existing wallet that you want to import.
+2. **Restore existing wallet**: Choose this option if you already have a mnemonic for an existing wallet that you want to import.
 
 After entering your mnemonic (or generating a new one), you will be prompted to create a secure password:
 
@@ -27,7 +27,7 @@ Once you’ve set your password, the application will create your wallet.
 
 ### Wallet Data
 
-On the home screen, you can view your wallet data, including your balance, address, and collateral:
+On the home screen, you can view your wallet balance - ADA and tokens:
 
 ![wallet data](./assets/wallet-data.png)
 
@@ -35,7 +35,7 @@ On the home screen, you can view your wallet data, including your balance, addre
 
 To interact with Cardano smart contracts, you must provide collateral. This is typically 5 ADA and is returned when the smart contract transaction is successfully executed.
 
-To create collateral, click the `SET COLLATERAL` button and enter your password. After signing and submitting the transaction, you will see the collateral UTxO ID:
+To create collateral, click the account button in the top right corner and then the `SET COLLATERAL` button. Then enter your password. After signing and submitting the transaction, you will see the collateral UTxO ID:
 
 ![create collateral](./assets/create-collateral.png)
 
@@ -50,6 +50,16 @@ When a dApp requests a connection to your wallet, a new window of the WingRiders
 When a dApp requests to sign a transaction with your wallet, a new window of the WingRiders Wallet Gateway will open, allowing you to sign the transaction:
 
 ![sign transaction request](./assets/sign-tx-request.png)
+
+### Connected dApps
+
+If a dApp initiates a connection request to your wallet ([Connecting to dApps](#connecting-to-dapps)) and you accept it, the dApp will be added to the list of connected dApps in your wallet.
+
+Your wallet will only process signing requests from connected dApps. If a transaction signing request comes from a dApp that is not in the connected dApps list, the wallet will ignore it.
+
+You can view the list of connected dApps by opening your account details in the top-right corner. To remove a connected dApp, simply click the bin icon next to it.
+
+![Connected dApps](./assets/connected-dapps.png)
 
 ## Troubleshooting
 
