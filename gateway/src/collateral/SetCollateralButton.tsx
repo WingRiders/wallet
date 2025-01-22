@@ -1,4 +1,3 @@
-import {LoadingButton} from '@mui/lab'
 import {NETWORKS} from '@wingriders/cab/constants'
 import type {HexString, TxHash} from '@wingriders/cab/dappConnector'
 import {adaToLovelace} from '@wingriders/cab/helpers'
@@ -6,6 +5,7 @@ import {BigNumber, type Lovelace, type TxPlanArgs} from '@wingriders/cab/types'
 import type {Wallet} from '@wingriders/cab/wallet'
 import {WalletConnector, reverseAddress} from '@wingriders/cab/wallet/connector'
 import {useState} from 'react'
+import {TextButton} from '../components/Buttons/TextButton'
 import {EnterPasswordModal} from '../components/EnterPasswordModal'
 import {buildTx, signTx} from '../helpers/actions'
 import {getWalletOwner} from '../helpers/wallet'
@@ -16,10 +16,14 @@ import type {ResultType} from '../types'
 const COLLATERAL_QUANTITY = new BigNumber(adaToLovelace(5))
 
 type SetCollateralButtonProps = {
+  hasCollateral?: boolean
   onCreate: (result: ResultType) => void
 }
 
-export const SetCollateralButton = ({onCreate}: SetCollateralButtonProps) => {
+export const SetCollateralButton = ({
+  hasCollateral,
+  onCreate,
+}: SetCollateralButtonProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
 
@@ -78,12 +82,13 @@ export const SetCollateralButton = ({onCreate}: SetCollateralButtonProps) => {
 
   return (
     <>
-      <LoadingButton
+      <TextButton
         onClick={() => setIsPasswordModalOpen(true)}
         loading={isLoading}
+        disabled={isLoading}
       >
-        Set collateral
-      </LoadingButton>
+        {hasCollateral ? 'Set new collateral' : 'Set collateral'}
+      </TextButton>
       <EnterPasswordModal
         open={isPasswordModalOpen}
         onClose={() => setIsPasswordModalOpen(false)}

@@ -1,22 +1,18 @@
 import LoginIcon from '@mui/icons-material/Login'
-import {LoadingButton} from '@mui/lab'
-import {
-  Alert,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-} from '@mui/material'
+import {Alert} from '@mui/material'
 import type {JsCryptoProvider} from '@wingriders/cab/crypto'
 import type {Wallet} from '@wingriders/cab/wallet'
 import {useEffect} from 'react'
 import {type SubmitHandler, useForm} from 'react-hook-form'
 import {useShallow} from 'zustand/shallow'
 import {decryptData} from '../helpers/encryption'
-import {getTextFieldErrorFields} from '../helpers/forms'
+import {getErrorMessage} from '../helpers/forms'
 import {initWallet} from '../helpers/wallet'
 import {useCreatedWalletStore} from '../store/createdWallet'
+import {Button} from './Buttons/Button'
+import {FormField} from './FormField'
+import {InputField} from './InputField'
+import {Modal} from './Modals/Modal'
 
 type EnterPasswordModalProps = {
   open: boolean
@@ -87,39 +83,40 @@ export const EnterPasswordModal = ({
   }
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Enter your password</DialogTitle>
-      <DialogContent sx={{minWidth: '500px'}}>
-        <TextField
+    <Modal
+      open={open}
+      onClose={onClose}
+      title="Enter your password"
+      actions={
+        <Button
+          onClick={handleSubmit(onSubmit)}
+          loading={isSubmitting && 'centered'}
+          disabled={isSubmitting}
+          icon={<LoginIcon fontSize="inherit" />}
+          sx={{minWidth: 150}}
+        >
+          Login
+        </Button>
+      }
+      actionsSx={{my: 2}}
+      width={500}
+    >
+      <FormField label="Password" error={getErrorMessage(errors.password)}>
+        <InputField
           {...register('password', {
             required: true,
           })}
-          label="Password"
           type="password"
-          variant="filled"
-          fullWidth
+          placeholder="Enter your password"
           disabled={isSubmitting}
-          {...getTextFieldErrorFields(errors.password)}
         />
+      </FormField>
 
-        {errors.root && (
-          <Alert severity="error" sx={{mt: 2}}>
-            {errors.root.message || 'Login failed'}
-          </Alert>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <LoadingButton
-          variant="contained"
-          onClick={handleSubmit(onSubmit)}
-          loading={isSubmitting}
-          endIcon={<LoginIcon />}
-          loadingPosition="end"
-          sx={{width: '20%', maxWidth: '300px'}}
-        >
-          Login
-        </LoadingButton>
-      </DialogActions>
-    </Dialog>
+      {errors.root && (
+        <Alert severity="error" sx={{mt: 2}}>
+          {errors.root.message || 'Login failed'}
+        </Alert>
+      )}
+    </Modal>
   )
 }

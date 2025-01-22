@@ -1,8 +1,14 @@
-import {Box, Button, Checkbox, FormControlLabel} from '@mui/material'
+import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import {Box, Checkbox, FormControlLabel, Grid2, Stack} from '@mui/material'
 import {generateMnemonic} from '@wingriders/cab/crypto'
 import {useState} from 'react'
 import {useShallow} from 'zustand/shallow'
+import {TextButton} from '../../../components/Buttons/TextButton'
 import {FlowNavigation} from '../../../components/FlowNavigation'
+import {Label} from '../../../components/Typography/Label'
+import {Paragraph} from '../../../components/Typography/Paragraph'
+import {WithClipboard} from '../../../components/WithClipboard'
 import {useCreateWalletStore} from '../../../store/createWallet'
 
 const MNEMONIC_WORD_COUNT = 24
@@ -24,7 +30,7 @@ export const GenerateMnemonic = () => {
 
   const onSubmit = () => {
     if (!generatedMnemonic) return
-    submitMnemonic(generatedMnemonic)
+    submitMnemonic(generatedMnemonic, true)
   }
 
   return (
@@ -32,15 +38,55 @@ export const GenerateMnemonic = () => {
       <Box
         sx={({palette}) => ({
           bgcolor: palette.background.paper,
-          p: 2,
         })}
       >
-        {generatedMnemonic ?? (
-          <Button variant="text" onClick={handleGenerateMnemonic}>
-            Reveal mnemonic
-          </Button>
+        {generatedMnemonic ? (
+          <Grid2 container spacing={2} p={5}>
+            {generatedMnemonic.split(' ').map((word, index) => (
+              <Grid2 key={index} size={{xs: 6, sm: 4, md: 3}}>
+                <Label variant="large">
+                  {index + 1}. {word}
+                </Label>
+              </Grid2>
+            ))}
+          </Grid2>
+        ) : (
+          <Stack
+            height={195}
+            justifyContent="center"
+            alignItems="center"
+            spacing={1}
+          >
+            <TextButton
+              onClick={handleGenerateMnemonic}
+              icon={<VisibilityIcon fontSize="small" />}
+            >
+              Reveal mnemonic
+            </TextButton>
+
+            <Paragraph>
+              Make sure you are in a secure environment and no one is watching
+            </Paragraph>
+          </Stack>
         )}
       </Box>
+      {generatedMnemonic && (
+        <Box mt={3} textAlign="end">
+          <WithClipboard text={generatedMnemonic}>
+            {({copy, isCopied}) => (
+              <TextButton
+                onClick={copy}
+                color="secondary"
+                p={0}
+                uppercase={false}
+                icon={<ContentCopyIcon fontSize="small" />}
+              >
+                {isCopied ? 'Copied' : 'Copy mnemonic'}
+              </TextButton>
+            )}
+          </WithClipboard>
+        </Box>
+      )}
 
       <FormControlLabel
         control={

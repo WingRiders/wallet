@@ -1,11 +1,14 @@
 import SendIcon from '@mui/icons-material/Send'
-import {Alert, Box, Stack, TextField, Typography} from '@mui/material'
+import {Alert, Box, Stack} from '@mui/material'
 import {useNavigate} from '@tanstack/react-router'
 import {type SubmitHandler, useForm} from 'react-hook-form'
 import {useShallow} from 'zustand/shallow'
 import {FlowNavigation} from '../../../components/FlowNavigation'
+import {FormField} from '../../../components/FormField'
+import {InputField} from '../../../components/InputField'
+import {Paragraph} from '../../../components/Typography/Paragraph'
 import {encryptData} from '../../../helpers/encryption'
-import {getTextFieldErrorFields} from '../../../helpers/forms'
+import {getErrorMessage} from '../../../helpers/forms'
 import {validatePassword} from '../../../helpers/validation'
 import {getWalletData, initWallet} from '../../../helpers/wallet'
 import {
@@ -83,37 +86,39 @@ export const EnterPassword = () => {
 
   return (
     <Box>
-      <Typography mb={3} variant="h5">
-        Create a secure password
-      </Typography>
+      <Paragraph variant="large" mb={5}>
+        Create a new password for your wallet. This password will be required
+        for every interaction with your wallet.
+      </Paragraph>
 
       <Stack spacing={2}>
-        <TextField
-          {...register('password', {
-            required: true,
-            validate: validatePassword,
-          })}
-          label="Password"
-          type="password"
-          fullWidth
-          variant="filled"
-          disabled={isSubmitting}
-          {...getTextFieldErrorFields(errors.password)}
-        />
-        <TextField
-          {...register('passwordConfirmation', {
-            required: true,
-            validate: (value, inputs) => {
-              if (value !== inputs.password) return 'Passwords do not match'
-            },
-          })}
+        <FormField label="Password" error={getErrorMessage(errors.password)}>
+          <InputField
+            {...register('password', {
+              required: true,
+              validate: validatePassword,
+            })}
+            type="password"
+            placeholder="Enter your password"
+            disabled={isSubmitting}
+          />
+        </FormField>
+        <FormField
           label="Confirm password"
-          type="password"
-          fullWidth
-          variant="filled"
-          disabled={isSubmitting}
-          {...getTextFieldErrorFields(errors.passwordConfirmation)}
-        />
+          error={getErrorMessage(errors.passwordConfirmation)}
+        >
+          <InputField
+            {...register('passwordConfirmation', {
+              required: true,
+              validate: (value, inputs) => {
+                if (value !== inputs.password) return 'Passwords do not match'
+              },
+            })}
+            type="password"
+            placeholder="Confirm your password"
+            disabled={isSubmitting}
+          />
+        </FormField>
       </Stack>
 
       <FlowNavigation
@@ -126,7 +131,7 @@ export const EnterPassword = () => {
           label: 'Create wallet',
           onClick: handleSubmit(onSubmit),
           isLoading: isSubmitting,
-          icon: <SendIcon />,
+          icon: <SendIcon fontSize="small" />,
         }}
       />
 

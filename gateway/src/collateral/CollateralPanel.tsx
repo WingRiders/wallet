@@ -1,6 +1,6 @@
-import {Alert, Stack, Typography} from '@mui/material'
-import {utxoId} from '@wingriders/cab/helpers'
+import {Alert, Stack} from '@mui/material'
 import {useState} from 'react'
+import {Label} from '../components/Typography/Label'
 import {useWalletDataStore} from '../store/walletData'
 import type {ResultType} from '../types'
 import {SetCollateralButton} from './SetCollateralButton'
@@ -13,12 +13,18 @@ export const CollateralPanel = () => {
   return (
     <Stack spacing={1}>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Typography variant="body1">
-          {collateral
-            ? `Collateral set (${utxoId(collateral)})`
-            : 'Collateral not set'}
-        </Typography>
-        <SetCollateralButton onCreate={setCreateCollateralResult} />
+        <Label
+          variant="large"
+          sx={({palette}) => ({
+            color: collateral ? palette.success.main : palette.error.main,
+          })}
+        >
+          {collateral ? 'Collateral set' : 'Collateral not set'}
+        </Label>
+        <SetCollateralButton
+          hasCollateral={!!collateral}
+          onCreate={setCreateCollateralResult}
+        />
       </Stack>
 
       {createCollateralResult && (

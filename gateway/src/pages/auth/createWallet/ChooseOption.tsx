@@ -1,7 +1,9 @@
-import AddCircleIcon from '@mui/icons-material/AddCircle'
-import GetAppIcon from '@mui/icons-material/GetApp'
-import {Stack, Typography} from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore'
+import {Box, Stack} from '@mui/material'
 import type {ReactNode} from 'react'
+import {Button} from '../../../components/Buttons/Button'
+import {Paragraph} from '../../../components/Typography/Paragraph'
 import {
   CreateWalletOption,
   useCreateWalletStore,
@@ -11,19 +13,48 @@ export const ChooseOption = () => {
   const startFlow = useCreateWalletStore((s) => s.startFlow)
 
   return (
-    <Stack direction="row" alignItems="center" spacing={1}>
-      <OptionButton
-        label="Create a new wallet"
-        description="Create a new wallet with a new seed phrase."
-        onClick={() => startFlow(CreateWalletOption.CREATE)}
-        icon={<AddCircleIcon />}
-      />
-      <OptionButton
-        label="Import existing wallet"
-        description="Import an existing wallet using a seed phrase."
-        onClick={() => startFlow(CreateWalletOption.IMPORT)}
-        icon={<GetAppIcon />}
-      />
+    <Stack
+      direction={{xs: 'column-reverse', md: 'row'}}
+      spacing={{xs: 5, md: 15}}
+    >
+      <Stack
+        direction={{xs: 'column', sm: 'row'}}
+        alignItems="stretch"
+        spacing={6}
+        flex={2}
+      >
+        <Box flex={1}>
+          <OptionButton
+            label="Create a new wallet"
+            description="Create a new WingRiders Prime wallet and start your Cardano journey. Secure your funds with a unique recovery phrase, giving you full control and ownership of your assets."
+            onClick={() => startFlow(CreateWalletOption.CREATE)}
+            icon={<AddIcon fontSize="small" />}
+          />
+        </Box>
+        <Box flex={1}>
+          <OptionButton
+            label="Restore existing wallet"
+            description="Restore your wallet using a recovery phrase. Access your wallet and continue managing your funds seamlessly."
+            onClick={() => startFlow(CreateWalletOption.IMPORT)}
+            icon={<SettingsBackupRestoreIcon fontSize="small" />}
+          />
+        </Box>
+      </Stack>
+
+      <Stack spacing={3} flex={1}>
+        <Paragraph variant="long">
+          WingRiders Prime wallet is a secure, mobile-friendly, and intuitive
+          wallet designed to simplify your journey in the Cardano dApps
+          ecosystem. Fully integrated with the WingRiders platform, it allows
+          seamless connection to dApps and gives you complete control over you
+          assets.
+        </Paragraph>
+        <Paragraph variant="long">
+          Whether you're creating a new wallet, restoring an existing one,
+          WingRiders Prime wallet ensures a smooth and efficient experience
+          across all your devices.
+        </Paragraph>
+      </Stack>
     </Stack>
   )
 }
@@ -42,33 +73,35 @@ const OptionButton = ({
   onClick,
 }: OptionButtonProps) => {
   return (
-    <Stack
-      onClick={onClick}
+    <Box
       sx={({palette}) => ({
-        bgcolor: palette.background.paper,
-        color: palette.text.primary,
-        p: 4,
-        border: 'none',
-        '&:hover': {
-          bgcolor: palette.action.hover,
-        },
-        cursor: 'pointer',
+        p: 6,
+        pb: 10,
+        background: palette.background.paper,
+        border: `1px solid ${palette.border.container}`,
+        height: '100%',
+        position: 'relative',
       })}
-      component="button"
-      spacing={1}
     >
-      <Stack direction="row" spacing={1}>
-        {icon}
-        <Typography variant="button">{label}</Typography>
-      </Stack>
-      <Typography
-        variant="subtitle2"
+      <Box
         sx={({palette}) => ({
-          color: palette.text.secondary,
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          top: 0,
+          height: '1px',
+          background: palette.gradient.success,
         })}
-      >
-        {description}
-      </Typography>
-    </Stack>
+      />
+
+      <Stack alignItems="center" spacing={5} height="100%">
+        <Paragraph variant="long" sx={{textAlign: 'center', flex: 1}}>
+          {description}
+        </Paragraph>
+        <Button icon={icon} onClick={onClick}>
+          {label}
+        </Button>
+      </Stack>
+    </Box>
   )
 }

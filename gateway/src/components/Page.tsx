@@ -1,6 +1,6 @@
 import {Container, Stack} from '@mui/material'
 import type {ReactNode} from 'react'
-import {Header, type HeaderProps} from './Header'
+import {Header, type HeaderProps} from '../app/Header'
 
 type PageProps = {
   showHeader?: boolean
