@@ -15,7 +15,7 @@ This project uses [Bun](https://bun.sh/). If you don't have Bun installed, you c
 
 The dapp-plugin uses Rollup for building the NPM package. Make sure you use the version of Node.js that is defined in the [./nvmrc](.nvmrc) file.
 
-We recommend using [`nvm` (Node Version Manager)](https://github.com/nvm-sh/nvm) to manage your Node.js versions efficiently. If you install `nvm`, you can simply run `nvm use` and the correct version of Node.js will be downloaded and used in your current terminal session.
+We recommend using [`nvm` (Node Version Manager)](https://github.com/nvm-sh/nvm) to manage your Node.js versions efficiently. If you install `nvm`, you can simply run `nvm install` and `nvm use` and the correct version of Node.js will be downloaded and used in your current terminal session.
 
 ### Installing dependencies
 
