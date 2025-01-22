@@ -22,10 +22,10 @@ type Inputs = {
 export const LoginPage = () => {
   const navigate = useNavigate()
 
-  const {createdWallet, setCreatedWallet, network} = useCreatedWalletStore(
-    useShallow(({createdWallet, setCreatedWallet, network}) => ({
+  const {createdWallet, clearCreatedWallet, network} = useCreatedWalletStore(
+    useShallow(({createdWallet, clearCreatedWallet, network}) => ({
       createdWallet,
-      setCreatedWallet,
+      clearCreatedWallet,
       network,
     })),
   )
@@ -107,7 +107,7 @@ export const LoginPage = () => {
 
           <TextButton
             onClick={() => {
-              setCreatedWallet(null)
+              clearCreatedWallet()
               clearWalletData()
               return navigate({to: '/auth/create-wallet'})
             }}

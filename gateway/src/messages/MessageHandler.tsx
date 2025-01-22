@@ -12,6 +12,7 @@ import {
 } from '@wingriders/wallet-common'
 import {useState} from 'react'
 import {match} from 'ts-pattern'
+import {useShallow} from 'zustand/shallow'
 import {EnterPasswordModal} from '../components/EnterPasswordModal'
 import {Page} from '../components/Page'
 import {useCreatedWalletStore} from '../store/createdWallet'
@@ -31,7 +32,9 @@ export const MessageHandler = () => {
   const [isLoading, setIsLoading] = useState(false)
   const pendingRequestMessage = useMessagesStore((s) => s.pendingMessage)
   const collateralUtxoRef = useWalletDataStore((s) => s.collateral)
-  const network = useCreatedWalletStore((s) => s.network)
+  const {network, addAllowedOrigin} = useCreatedWalletStore(
+    useShallow(({network, addAllowedOrigin}) => ({network, addAllowedOrigin})),
+  )
 
   if (!pendingRequestMessage) return null
 
@@ -76,6 +79,9 @@ export const MessageHandler = () => {
 
       if (!responseMessage) throw new Error('Unhandled message type')
 
+      if (pendingRequestMessage.message.type === MessageType.INIT_REQUEST) {
+        addAllowedOrigin(pendingRequestMessage.origin)
+      }
       pendingRequestMessage.eventSource.postMessage(responseMessage, {
         targetOrigin: pendingRequestMessage.origin,
       })
