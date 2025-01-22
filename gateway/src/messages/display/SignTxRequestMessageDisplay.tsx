@@ -4,6 +4,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Alert,
   Box,
   Link,
   Stack,
@@ -85,7 +86,7 @@ export const SignTxRequestMessageDisplay = ({
   })
 
   const userAddresses = useMemo(() => {
-    if (!addresses) throw new Error('Wallet data not found')
+    if (!addresses) return undefined
 
     const {usedAddresses, unusedAddresses, changeAddress, rewardAddresses} =
       addresses
@@ -97,10 +98,14 @@ export const SignTxRequestMessageDisplay = ({
     ])
   }, [addresses])
 
-  const userDiffValue = useMemo(() => {
+  const reversedTx = useMemo(() => {
     if (!txUtxos) return undefined
 
-    const reversedTx = reverseTx(transaction, txUtxos)
+    return reverseTx(transaction, txUtxos)
+  }, [txUtxos, transaction])
+
+  const userDiffValue = useMemo(() => {
+    if (!reversedTx || !userAddresses) return undefined
 
     const matchUserUtxo = (utxo: {address: Address}) =>
       userAddresses.has(utxo.address)
@@ -120,7 +125,7 @@ export const SignTxRequestMessageDisplay = ({
       lovelace: valueToLovelace(userDiffValue),
       tokens: valueToTokenBundle(userDiffValue, {withoutZero: true}),
     }
-  }, [txUtxos, transaction, userAddresses])
+  }, [reversedTx, userAddresses])
 
   const {data: assetsMetadata, loading: isLoadingAssetsMetadata} =
     useApolloQuery(assetsMetadataQuery, {
@@ -131,12 +136,15 @@ export const SignTxRequestMessageDisplay = ({
 
   const isLoadingData = isLoadingInputUtxos || isLoadingAssetsMetadata
 
+  // if the transaction is made for a different network than the wallet's network, no UTxOs are fetched.
+  const isTxValid = txUtxos && txUtxos.length > 0
+
   return (
     <MessageDisplayParent
       onAllow={onAllow}
       onReject={onReject}
       isLoading={isLoading}
-      disabled={isLoadingData}
+      disabled={isLoadingData || !isTxValid || !userAddresses}
       title="Sign transaction request"
       allowText="Sign"
     >
@@ -148,38 +156,51 @@ export const SignTxRequestMessageDisplay = ({
       </Typography>
 
       <Skeleton if={isLoadingData} fullWidth>
-        <Stack bgcolor={({palette}) => palette.background.paper} p={2}>
-          {userDiffValue && assetsMetadata ? (
-            <>
-              <Typography variant="h4">
-                <DiffDisplay diff={userDiffValue.lovelace}>
-                  <AssetQuantityDisplay
-                    token={{
-                      ...AdaAsset,
-                      quantity: userDiffValue.lovelace,
-                    }}
-                    options={{showSignIfPositive: true}}
-                  />
-                </DiffDisplay>
-              </Typography>
+        {!userAddresses && (
+          <Alert severity="error">
+            Wallet not found, please login to your wallet again.
+          </Alert>
+        )}
 
-              <Stack>
-                {userDiffValue.tokens.map((token) => (
-                  <Typography key={assetId(token)} variant="body1">
-                    <DiffDisplay diff={token.quantity}>
-                      <AssetQuantityDisplay
-                        token={token}
-                        options={{showSignIfPositive: true}}
-                      />
-                    </DiffDisplay>
-                  </Typography>
-                ))}
-              </Stack>
-            </>
-          ) : (
-            '-'
-          )}
-        </Stack>
+        {isTxValid ? (
+          <Stack bgcolor={({palette}) => palette.background.paper} p={2}>
+            {userDiffValue && assetsMetadata ? (
+              <>
+                <Typography variant="h4">
+                  <DiffDisplay diff={userDiffValue.lovelace}>
+                    <AssetQuantityDisplay
+                      token={{
+                        ...AdaAsset,
+                        quantity: userDiffValue.lovelace,
+                      }}
+                      options={{showSignIfPositive: true}}
+                    />
+                  </DiffDisplay>
+                </Typography>
+
+                <Stack>
+                  {userDiffValue.tokens.map((token) => (
+                    <Typography key={assetId(token)} variant="body1">
+                      <DiffDisplay diff={token.quantity}>
+                        <AssetQuantityDisplay
+                          token={token}
+                          options={{showSignIfPositive: true}}
+                        />
+                      </DiffDisplay>
+                    </Typography>
+                  ))}
+                </Stack>
+              </>
+            ) : (
+              '-'
+            )}
+          </Stack>
+        ) : (
+          <Alert severity="error">
+            Invalid transaction, please make sure your wallet is on the expected
+            network.
+          </Alert>
+        )}
       </Skeleton>
 
       <Box bgcolor={({palette}) => palette.background.paper} p={2} mt={3}>
