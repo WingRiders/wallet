@@ -1,5 +1,6 @@
 import {ApolloClient, InMemoryCache} from '@apollo/client'
-import {config} from '../config'
+import type {NetworkName} from '@wingriders/cab/types'
+import {apiServerUrlByNetwork} from '../config'
 import {parseGqlTokenMetadata} from '../metadata/parse'
 import {updateTokensMetadataVar} from '../metadata/reactiveVars'
 import type {TokenMetadata} from './generated/graphql'
@@ -32,7 +33,8 @@ const cache = new InMemoryCache({
   },
 })
 
-export const client = new ApolloClient({
-  uri: `${config.API_SERVER_URL_PREPROD}/graphql`,
-  cache,
-})
+export const createClient = (network: NetworkName) =>
+  new ApolloClient({
+    uri: `${apiServerUrlByNetwork[network]}/graphql`,
+    cache,
+  })

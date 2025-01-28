@@ -4,11 +4,10 @@ import {createRoot} from 'react-dom/client'
 import {routeTree} from './routeTree.gen'
 
 import './index.css'
-import {ApolloProvider} from '@apollo/client'
 import {CssBaseline, ThemeProvider} from '@mui/material'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import {AppBackground} from './components/AppBackground'
-import {client} from './graphql/client'
+import {ApolloProvider} from './graphql/ApolloProvider'
 import {useSyncConfigAndStoreNetwork} from './helpers/network'
 import {MessageListener} from './messages/MessageListener'
 import {useCreatedWalletStore} from './store/createdWallet'
@@ -57,7 +56,7 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <ThemeProvider theme={theme}>
-        <ApolloProvider client={client}>
+        <ApolloProvider>
           <QueryClientProvider client={queryClient}>
             <CssBaseline />
             <MessageListener>
