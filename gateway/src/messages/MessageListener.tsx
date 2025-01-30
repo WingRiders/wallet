@@ -70,8 +70,9 @@ export const MessageListener = ({children}: MessageListenerProps) => {
 
   // resolve pending message when user closes the window
   useEffect(() => {
-    const handleBeforeUnload = () => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       if (pendingMessage) {
+        event.preventDefault()
         const responseMessageType = getResponseMessageType(
           pendingMessage.message.type,
         )
