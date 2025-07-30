@@ -1,4 +1,10 @@
-import {AppBar, Stack, useScrollTrigger} from '@mui/material'
+import {
+  AppBar,
+  Stack,
+  useMediaQuery,
+  useScrollTrigger,
+  useTheme,
+} from '@mui/material'
 import Logo from '../assets/logo.svg?react'
 import {NetworkSwitch} from '../components/NetworkSwitch'
 import {WalletButton} from './WalletButton'
@@ -10,6 +16,9 @@ export type HeaderProps = {
 
 export const Header = ({showWallet, showNetwork}: HeaderProps) => {
   const scrolled = useScrollTrigger({threshold: 20, disableHysteresis: true})
+
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   return (
     <AppBar
@@ -36,7 +45,7 @@ export const Header = ({showWallet, showNetwork}: HeaderProps) => {
         height="100%"
         minHeight={50}
       >
-        <Logo height={40} width={170} />
+        <Logo height={40} width={isMobile ? 120 : 170} />
 
         <Stack direction="row" alignItems="center" spacing={2}>
           {showNetwork && <NetworkSwitch size="small" />}
