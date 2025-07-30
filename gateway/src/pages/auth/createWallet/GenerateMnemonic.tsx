@@ -36,6 +36,7 @@ export const GenerateMnemonic = () => {
   return (
     <Box>
       <Box
+        p={4}
         sx={({palette}) => ({
           bgcolor: palette.background.paper,
         })}
@@ -64,7 +65,7 @@ export const GenerateMnemonic = () => {
               Reveal mnemonic
             </TextButton>
 
-            <Paragraph>
+            <Paragraph sx={{textAlign: 'center'}}>
               Make sure you are in a secure environment and no one is watching
             </Paragraph>
           </Stack>
