@@ -72,6 +72,11 @@ const StyledTextField = styled(TextField, {
         textAlign: textAlign || (inputVariant === 'large' ? 'center' : 'left'),
       },
     },
+    '& .MuiInputBase-input': {
+      [theme.breakpoints.down('md')]: {
+        fontSize: '16px',
+      },
+    },
     '& .MuiOutlinedInput-root': {
       fieldset: {
         borderRadius: 0,
