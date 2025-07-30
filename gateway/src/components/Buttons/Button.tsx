@@ -148,6 +148,7 @@ export const Button = (props: ButtonProps) => {
         {
           py: {'extra-small': 2.5, small: 3, medium: 3.5, large: 4}[size],
           px: 5,
+          minWidth: 'fit-content',
         },
         sx,
       )}
