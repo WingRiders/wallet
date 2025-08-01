@@ -100,6 +100,7 @@ export const EnterPasswordModal = ({
       }
       actionsSx={{my: 2}}
       width={500}
+      disableFullScreenOnMobile
     >
       <FormField label="Password" error={getErrorMessage(errors.password)}>
         <InputField

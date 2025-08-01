@@ -79,7 +79,7 @@ export const LoginPage = () => {
   }
 
   return (
-    <Page showHeader headerProps={{showNetwork: true}}>
+    <Page headerProps={{showNetwork: true}}>
       <Paper title="Login">
         <FormField label="Password" error={getErrorMessage(errors.password)}>
           <InputField
@@ -99,7 +99,7 @@ export const LoginPage = () => {
             onClick={handleSubmit(onSubmit)}
             loading={isSubmitting && 'centered'}
             disabled={isSubmitting}
-            icon={<LoginIcon fontSize="small" />}
+            icon={<LoginIcon fontSize="inherit" />}
             sx={{width: '20%', maxWidth: '300px'}}
           >
             Login

@@ -27,7 +27,7 @@ export const HomePage = () => {
   })
 
   return (
-    <Page showHeader headerProps={{showWallet: true}}>
+    <Page headerProps={{showWallet: true}}>
       <Paper
         title="Your wallet"
         topRightButton={

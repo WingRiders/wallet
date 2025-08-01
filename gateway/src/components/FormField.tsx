@@ -24,7 +24,7 @@ export const FormField = ({
   return (
     <Stack sx={sx}>
       {(label || tooltip) && (
-        <Stack direction="row" alignItems="center" spacing={1} mb={1}>
+        <Stack direction="row" alignItems="center" spacing={1} mb={1.5}>
           {label &&
             (typeof label === 'string' ? (
               <Label variant="large">{label}</Label>
