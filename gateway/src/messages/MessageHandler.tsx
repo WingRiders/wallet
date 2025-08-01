@@ -15,6 +15,7 @@ import {match} from 'ts-pattern'
 import {useShallow} from 'zustand/shallow'
 import {EnterPasswordModal} from '../components/EnterPasswordModal'
 import {Page} from '../components/Page'
+import {Paper} from '../components/Paper'
 import {useCreatedWalletStore} from '../store/createdWallet'
 import {useMessagesStore} from '../store/messages'
 import {useWalletDataStore} from '../store/walletData'
@@ -112,25 +113,27 @@ export const MessageHandler = () => {
   }
 
   return (
-    <Page>
-      <MessageDisplay
-        item={pendingRequestMessage}
-        isLoading={isLoading}
-        onAllow={() => setShowPasswordModal(true)}
-        onReject={() => {
-          handleMessageFail({
-            code: getDeclinedErrorCode(pendingRequestMessage.message.type),
-            info: 'User rejected the request',
-          })
-          window.close()
-        }}
-      />
+    <Page headerProps={{showNetwork: true}}>
+      <Paper>
+        <MessageDisplay
+          item={pendingRequestMessage}
+          isLoading={isLoading}
+          onAllow={() => setShowPasswordModal(true)}
+          onReject={() => {
+            handleMessageFail({
+              code: getDeclinedErrorCode(pendingRequestMessage.message.type),
+              info: 'User rejected the request',
+            })
+            window.close()
+          }}
+        />
 
-      <EnterPasswordModal
-        open={showPasswordModal}
-        onClose={() => setShowPasswordModal(false)}
-        onLogin={handleLogin}
-      />
+        <EnterPasswordModal
+          open={showPasswordModal}
+          onClose={() => setShowPasswordModal(false)}
+          onLogin={handleLogin}
+        />
+      </Paper>
     </Page>
   )
 }

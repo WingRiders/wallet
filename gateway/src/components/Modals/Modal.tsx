@@ -38,6 +38,7 @@ export type ModalProps = Pick<
   contentMaxHeight?: AllSystemCSSProperties['maxHeight']
   footer?: ReactNode
   headerSx?: SxProps<Theme>
+  disableFullScreenOnMobile?: boolean
 }
 
 export const Modal = ({
@@ -45,6 +46,7 @@ export const Modal = ({
   keepMounted,
   allowBackdropDismiss,
   headerSx,
+  disableFullScreenOnMobile,
   ...props
 }: ModalProps) => {
   const {
@@ -83,7 +85,7 @@ export const Modal = ({
       open={open}
       onClose={handleClose}
       keepMounted={keepMounted}
-      fullScreen={useIsMobile()}
+      fullScreen={useIsMobile() && !disableFullScreenOnMobile}
       sx={(theme) => ({
         '& .MuiDialog-paper': {
           borderRadius: 0,
@@ -103,6 +105,11 @@ export const Modal = ({
             height,
             maxHeight,
           },
+          ...(disableFullScreenOnMobile
+            ? {
+                width,
+              }
+            : {}),
         },
       })}
     >

@@ -6,7 +6,6 @@ import {
   AccordionSummary,
   Alert,
   Box,
-  Link,
   Stack,
   Typography,
 } from '@mui/material'
@@ -146,15 +145,10 @@ export const SignTxRequestMessageDisplay = ({
       isLoading={isLoading}
       disabled={isLoadingData || !isTxValid || !userAddresses}
       title="Sign transaction request"
+      origin={item.origin}
+      requestText="is requesting to sign transaction."
       allowText="Sign"
     >
-      <Typography sx={{mb: 2}}>
-        <Link href={item.origin} target="_blank">
-          {item.origin}
-        </Link>{' '}
-        is requesting to sign transaction.
-      </Typography>
-
       <Skeleton if={isLoadingData} fullWidth>
         {!userAddresses && (
           <Alert severity="error">

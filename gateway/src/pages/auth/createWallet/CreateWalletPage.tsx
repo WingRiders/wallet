@@ -19,7 +19,7 @@ export const CreateWalletPage = () => {
   )
 
   return (
-    <Page showHeader headerProps={{showNetwork: true}}>
+    <Page headerProps={{showNetwork: true}}>
       <Paper
         title={
           option === CreateWalletOption.CREATE

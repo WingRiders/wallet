@@ -1,4 +1,4 @@
-import {Link, Typography} from '@mui/material'
+import {} from '@mui/material'
 import {MessageDisplayParent} from './MessageDisplayParent'
 import type {ConcreteMessageDisplayProps} from './types'
 
@@ -14,14 +14,9 @@ export const InitMessageDisplay = ({
       onReject={onReject}
       isLoading={isLoading}
       title="Connection request"
+      origin={item.origin}
+      requestText="is requesting to connect to your wallet."
       allowText="Connect"
-    >
-      <Typography>
-        <Link href={item.origin} target="_blank">
-          {item.origin}
-        </Link>{' '}
-        is requesting to connect to your wallet.
-      </Typography>
-    </MessageDisplayParent>
+    />
   )
 }

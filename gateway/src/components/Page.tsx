@@ -3,15 +3,14 @@ import type {ReactNode} from 'react'
 import {Header, type HeaderProps} from '../app/Header'
 
 type PageProps = {
-  showHeader?: boolean
   headerProps?: HeaderProps
   children?: ReactNode
 }
 
-export const Page = ({showHeader, headerProps, children}: PageProps) => {
+export const Page = ({headerProps, children}: PageProps) => {
   return (
     <Stack>
-      {showHeader && <Header {...headerProps} />}
+      <Header {...headerProps} />
       <Container maxWidth="lg" sx={{pt: 5}}>
         {children}
       </Container>

@@ -20,7 +20,7 @@ export const FlowNavigation = ({
   backButtonOptions,
 }: FlowNavigationProps) => {
   return (
-    <Stack direction="row" justifyContent="space-between" mt={10}>
+    <Stack direction="row" justifyContent="space-between" mt={10} spacing={2}>
       {backButtonOptions && (
         <TextButton
           onClick={backButtonOptions.onClick}
